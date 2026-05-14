@@ -31,6 +31,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JRadioButton;
 import javax.swing.JButton;
 import javax.swing.JTextField;
+import javax.swing.ImageIcon;
 
 /*
  * A classe Gui representa a tela principal do sistema.
@@ -481,25 +482,25 @@ public class Gui extends JFrame {
 		 * para ações como Salvar, Alterar, Consultar, Excluir ou Limpar.
 		 */
 		
-		JButton btnNewButton = new JButton("New button");
-		btnNewButton.setBounds(10, 126, 71, 66);
-		panel_Curso.add(btnNewButton);
+		JButton btnCursoSalvar = new JButton("");
+		btnCursoSalvar.setIcon(new ImageIcon("C:\\Users\\Pichau\\Documents\\Projeto-Sistema-Academico-JAVA\\sistemaAcademico\\img\\salvar.png"));
+		btnCursoSalvar.setBounds(10, 126, 93, 66);
+		panel_Curso.add(btnCursoSalvar);
 		
-		JButton btnNewButton_1 = new JButton("New button");
-		btnNewButton_1.setBounds(116, 126, 71, 66);
-		panel_Curso.add(btnNewButton_1);
+		JButton btnCursoAlterar = new JButton("");
+		btnCursoAlterar.setIcon(new ImageIcon("C:\\Users\\Pichau\\Documents\\Projeto-Sistema-Academico-JAVA\\sistemaAcademico\\img\\alterar.png"));
+		btnCursoAlterar.setBounds(138, 126, 93, 66);
+		panel_Curso.add(btnCursoAlterar);
 		
-		JButton btnNewButton_2 = new JButton("New button");
-		btnNewButton_2.setBounds(236, 126, 71, 66);
-		panel_Curso.add(btnNewButton_2);
+		JButton btnCursoConsultar = new JButton("");
+		btnCursoConsultar.setIcon(new ImageIcon("C:\\Users\\Pichau\\Documents\\Projeto-Sistema-Academico-JAVA\\sistemaAcademico\\img\\consultar.png"));
+		btnCursoConsultar.setBounds(298, 126, 89, 66);
+		panel_Curso.add(btnCursoConsultar);
 		
-		JButton btnNewButton_3 = new JButton("New button");
-		btnNewButton_3.setBounds(346, 126, 71, 66);
-		panel_Curso.add(btnNewButton_3);
-		
-		JButton btnNewButton_4 = new JButton("New button");
-		btnNewButton_4.setBounds(451, 126, 71, 66);
-		panel_Curso.add(btnNewButton_4);
+		JButton btnCursoExcluir = new JButton("");
+		btnCursoExcluir.setIcon(new ImageIcon("C:\\Users\\Pichau\\Documents\\Projeto-Sistema-Academico-JAVA\\sistemaAcademico\\img\\excluir.png"));
+		btnCursoExcluir.setBounds(433, 126, 89, 66);
+		panel_Curso.add(btnCursoExcluir);
 		
 		
 		//==================== FIM MENU CURSO ==========================
@@ -594,30 +595,25 @@ public class Gui extends JFrame {
 		ftf_Faltas.setBounds(277, 102, 81, 20);
 		panel_Notas_Faltas.add(ftf_Faltas);
 		
-		/*
-		 * Botões da aba Notas e Faltas.
-		 * Ainda estão com texto padrão "New button".
-		 */
+		JButton btnNfSalvar = new JButton("");
+		btnNfSalvar.setIcon(new ImageIcon("C:\\Users\\Pichau\\Documents\\Projeto-Sistema-Academico-JAVA\\sistemaAcademico\\img\\salvar.png"));
+		btnNfSalvar.setBounds(10, 139, 93, 66);
+		panel_Notas_Faltas.add(btnNfSalvar);
 		
-		JButton btnNewButton_5 = new JButton("New button");
-		btnNewButton_5.setBounds(10, 137, 71, 66);
-		panel_Notas_Faltas.add(btnNewButton_5);
+		JButton btnNfAlterar = new JButton("");
+		btnNfAlterar.setIcon(new ImageIcon("C:\\Users\\Pichau\\Documents\\Projeto-Sistema-Academico-JAVA\\sistemaAcademico\\img\\alterar.png"));
+		btnNfAlterar.setBounds(138, 139, 93, 66);
+		panel_Notas_Faltas.add(btnNfAlterar);
 		
-		JButton btnNewButton_1_1 = new JButton("New button");
-		btnNewButton_1_1.setBounds(116, 137, 71, 66);
-		panel_Notas_Faltas.add(btnNewButton_1_1);
+		JButton btnNfConsultar = new JButton("");
+		btnNfConsultar.setIcon(new ImageIcon("C:\\Users\\Pichau\\Documents\\Projeto-Sistema-Academico-JAVA\\sistemaAcademico\\img\\consultar.png"));
+		btnNfConsultar.setBounds(298, 139, 89, 66);
+		panel_Notas_Faltas.add(btnNfConsultar);
 		
-		JButton btnNewButton_2_1 = new JButton("New button");
-		btnNewButton_2_1.setBounds(236, 137, 71, 66);
-		panel_Notas_Faltas.add(btnNewButton_2_1);
-		
-		JButton btnNewButton_3_1 = new JButton("New button");
-		btnNewButton_3_1.setBounds(346, 137, 71, 66);
-		panel_Notas_Faltas.add(btnNewButton_3_1);
-		
-		JButton btnNewButton_4_1 = new JButton("New button");
-		btnNewButton_4_1.setBounds(451, 137, 71, 66);
-		panel_Notas_Faltas.add(btnNewButton_4_1);
+		JButton btnNfExcluir = new JButton("");
+		btnNfExcluir.setIcon(new ImageIcon("C:\\Users\\Pichau\\Documents\\Projeto-Sistema-Academico-JAVA\\sistemaAcademico\\img\\excluir.png"));
+		btnNfExcluir.setBounds(433, 139, 89, 66);
+		panel_Notas_Faltas.add(btnNfExcluir);
 		
 		//==================== FIM MENU NOTAS E FALTAS ==========================
 		
