@@ -150,7 +150,7 @@ public class Gui extends JFrame {
 		lblRgm.setBounds(10, 11, 46, 14);
 		panel_Dados_Pessoais.add(lblRgm);
 		
-		JFormattedTextField ftf_Rgm = new JFormattedTextField();
+		JFormattedTextField ftf_Rgm = new JFormattedTextField(new MaskFormatter("########"));
 		ftf_Rgm.setBounds(48, 8, 103, 20);
 		panel_Dados_Pessoais.add(ftf_Rgm);
 		
