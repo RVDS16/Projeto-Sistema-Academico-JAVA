@@ -63,13 +63,10 @@ public class Gui extends JFrame {
 	private JTextField tf_NomeBoletim;
 	private JTextField tf_RgmBoletim;
 	private JTextField tf_CursoBoletim;
-	private JTextField tf_DisciplinaPoo;
 	private JTextField tf_NotaBoletim;
 	private JTextField tf_FaltasBoletim;
-	private JTextField tf_BancoDadosBoletim;
 	private JTextField tf_NotaBancoDadosBoletim;
 	private JTextField tf_FaltasBancoDadosBoletim;
-	private JTextField textField;
 	private JTextField tf_NotaProgramacaoWebBoletim;
 	private JTextField tf_FaltasProgramacaoWebBoletim;
 
@@ -435,7 +432,7 @@ public class Gui extends JFrame {
 		
 		// Texto "Campus"
 		JLabel lblCampus = new JLabel("Campus");
-		lblCampus.setBounds(10, 42, 46, 14);
+		lblCampus.setBounds(10, 42, 59, 14);
 		panel_Curso.add(lblCampus);
 		
 		// ComboBox para selecionar o campus
@@ -570,7 +567,7 @@ public class Gui extends JFrame {
 		
 		// ComboBox para selecionar semestre
 		JComboBox cb_Semestre = new JComboBox();
-		cb_Semestre.setModel(new DefaultComboBoxModel(new String[] {"2025-1", "2025-2", "2026-1", "2026-2"}));
+		cb_Semestre.setModel(new DefaultComboBoxModel(new String[] {"1º", "2º", "3º", "4º", "5º", "6º", "7º", "8º"}));
 		cb_Semestre.setBounds(72, 101, 64, 22);
 		panel_Notas_Faltas.add(cb_Semestre);
 		
@@ -630,12 +627,12 @@ public class Gui extends JFrame {
 		
 		// Texto "Nome"
 		JLabel lblNomeBoletim = new JLabel("Nome ");
-		lblNomeBoletim.setBounds(10, 11, 46, 14);
+		lblNomeBoletim.setBounds(183, 11, 46, 14);
 		panel_Boletim.add(lblNomeBoletim);
 		
 		// Campo que mostra o nome no boletim
 		tf_NomeBoletim = new JTextField();
-		tf_NomeBoletim.setBounds(50, 8, 294, 20);
+		tf_NomeBoletim.setBounds(226, 8, 296, 20);
 		panel_Boletim.add(tf_NomeBoletim);
 		tf_NomeBoletim.setColumns(10);
 		
@@ -644,15 +641,13 @@ public class Gui extends JFrame {
 		
 		// Texto "RGM"
 		JLabel lblRgmBoletim = new JLabel("RGM");
-		lblRgmBoletim.setBounds(354, 11, 35, 14);
+		lblRgmBoletim.setBounds(10, 11, 35, 14);
 		panel_Boletim.add(lblRgmBoletim);
 		
 		// Campo que mostra o RGM no boletim
-		tf_RgmBoletim = new JTextField();
-		tf_RgmBoletim.setBounds(399, 8, 123, 20);
+		tf_RgmBoletim = new JFormattedTextField(new MaskFormatter("########"));
+		tf_RgmBoletim.setBounds(50, 8, 123, 20);
 		panel_Boletim.add(tf_RgmBoletim);
-		tf_RgmBoletim.setColumns(10);
-		tf_RgmBoletim.setEditable(false);
 		
 		// Texto "Curso"
 		JLabel lblCursoBoletim = new JLabel("Curso");
@@ -671,13 +666,6 @@ public class Gui extends JFrame {
 		lblPooBoletim.setBounds(10, 64, 233, 14);
 		panel_Boletim.add(lblPooBoletim);
 		
-		// Campo relacionado à disciplina POO
-		tf_DisciplinaPoo = new JTextField();
-		tf_DisciplinaPoo.setBounds(216, 61, 152, 20);
-		panel_Boletim.add(tf_DisciplinaPoo);
-		tf_DisciplinaPoo.setColumns(10);
-		tf_DisciplinaPoo.setEditable(false);
-		
 		// Texto "Nota" da disciplina POO
 		JLabel lblNotaPooBoletim = new JLabel("Nota");
 		lblNotaPooBoletim.setBounds(10, 89, 46, 14);
@@ -685,7 +673,7 @@ public class Gui extends JFrame {
 		
 		// Campo da nota de POO
 		tf_NotaBoletim = new JTextField();
-		tf_NotaBoletim.setBounds(48, 89, 46, 20);
+		tf_NotaBoletim.setBounds(50, 89, 46, 20);
 		panel_Boletim.add(tf_NotaBoletim);
 		tf_NotaBoletim.setColumns(10);
 		tf_NotaBoletim.setEditable(false);
@@ -707,13 +695,6 @@ public class Gui extends JFrame {
 		lblBancoDadosBoletim.setBounds(10, 120, 95, 14);
 		panel_Boletim.add(lblBancoDadosBoletim);
 		
-		// Campo relacionado à disciplina Banco de Dados
-		tf_BancoDadosBoletim = new JTextField();
-		tf_BancoDadosBoletim.setBounds(115, 117, 138, 20);
-		panel_Boletim.add(tf_BancoDadosBoletim);
-		tf_BancoDadosBoletim.setColumns(10);
-		tf_BancoDadosBoletim.setEditable(false);
-		
 		// Texto "Nota" de Banco de Dados
 		JLabel lblNotaBancoDadosBoletim = new JLabel("Nota");
 		lblNotaBancoDadosBoletim.setBounds(10, 145, 46, 14);
@@ -723,7 +704,7 @@ public class Gui extends JFrame {
 		tf_NotaBancoDadosBoletim = new JTextField();
 		tf_NotaBancoDadosBoletim.setEditable(false);
 		tf_NotaBancoDadosBoletim.setColumns(10);
-		tf_NotaBancoDadosBoletim.setBounds(48, 142, 46, 20);
+		tf_NotaBancoDadosBoletim.setBounds(50, 145, 46, 20);
 		panel_Boletim.add(tf_NotaBancoDadosBoletim);
 		
 		// Texto "Faltas" de Banco de Dados
@@ -743,13 +724,6 @@ public class Gui extends JFrame {
 		lblProgramacaoWebBoletim.setBounds(10, 170, 116, 14);
 		panel_Boletim.add(lblProgramacaoWebBoletim);
 		
-		// Campo relacionado à disciplina Programação WEB
-		textField = new JTextField();
-		textField.setEditable(false);
-		textField.setColumns(10);
-		textField.setBounds(135, 167, 138, 20);
-		panel_Boletim.add(textField);
-		
 		// Texto "Nota" de Programação WEB
 		JLabel lblNotaProgramacaoWebBoletim = new JLabel("Nota");
 		lblNotaProgramacaoWebBoletim.setBounds(10, 198, 46, 14);
@@ -759,7 +733,7 @@ public class Gui extends JFrame {
 		tf_NotaProgramacaoWebBoletim = new JTextField();
 		tf_NotaProgramacaoWebBoletim.setEditable(false);
 		tf_NotaProgramacaoWebBoletim.setColumns(10);
-		tf_NotaProgramacaoWebBoletim.setBounds(48, 195, 46, 20);
+		tf_NotaProgramacaoWebBoletim.setBounds(50, 195, 46, 20);
 		panel_Boletim.add(tf_NotaProgramacaoWebBoletim);
 		
 		// Texto "Faltas" de Programação WEB
@@ -773,6 +747,11 @@ public class Gui extends JFrame {
 		tf_FaltasProgramacaoWebBoletim.setColumns(10);
 		tf_FaltasProgramacaoWebBoletim.setBounds(170, 195, 46, 20);
 		panel_Boletim.add(tf_FaltasProgramacaoWebBoletim);
+		
+		JButton btnConsultarBoletim = new JButton("");
+		btnConsultarBoletim.setIcon(new ImageIcon("C:\\Users\\Pichau\\Documents\\Projeto-Sistema-Academico-JAVA\\sistemaAcademico\\img\\consultar.png"));
+		btnConsultarBoletim.setBounds(451, 132, 71, 73);
+		panel_Boletim.add(btnConsultarBoletim);
 		
 		//==================== FIM MENU BOLETIM ==========================
 		//======================== FIM CONTENTPANE ==========================
