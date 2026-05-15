@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 30, 2026 at 08:49 PM
+-- Generation Time: May 15, 2026 at 11:45 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -52,7 +52,7 @@ CREATE TABLE `tb_curso` (
   `campus` enum('Tatuape','Villa-Lobos','EAD','') NOT NULL,
   `periodo` enum('Matutino','Vespertino','Noturno','') NOT NULL,
   `nota` float(10,0) NOT NULL,
-  `semestre` enum('2025-1','2025-2','2026-1','2026-2') NOT NULL,
+  `semestre` enum('1º','2º','3º','4º','5º','6º','7º','8º') NOT NULL,
   `faltas` int(11) NOT NULL,
   `disciplina` enum('Programação Orientada a Objeto','Banco de dados','Programação WEB','') NOT NULL,
   `fk_rgm` char(8) NOT NULL
