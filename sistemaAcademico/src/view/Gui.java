@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
@@ -536,6 +537,134 @@ public class Gui extends JFrame {
 			}
 		});
 
+
+		mntmAlterar_Aluno.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					aluno = new Aluno();
+
+					aluno.setRgm(ftf_Rgm.getText());
+					aluno.setNome(ftf_Nome.getText());
+
+					String dataTela = ftf_Dt_Nasc.getText();
+					String[] partes = dataTela.split("/");
+					String dataBanco = partes[2] + "-" + partes[1] + "-" + partes[0];
+					aluno.setData_nasc(dataBanco);
+
+					aluno.setCpf(ftf_Cpf.getText().replace(".", "").replace("-", ""));
+					aluno.setEmail(ftf_Email.getText());
+					aluno.setEndereco(ftf_Endereco.getText());
+					aluno.setMunicipio(ftf_Municipio.getText());
+					aluno.setUf((String) cb_Uf.getSelectedItem());
+					aluno.setNumero(ftf_Celular.getText());
+
+					curso = new Curso();
+
+					curso.setCurso((String) cb_Curso.getSelectedItem());
+					curso.setCampus((String) cb_Campus.getSelectedItem());
+
+					String periodoSelecionado = "";
+
+					if (rdbtn_Matutino.isSelected()) {
+						periodoSelecionado = "Matutino";
+					} else if (rdbtn_Vespertino.isSelected()) {
+						periodoSelecionado = "Vespertino";
+					} else if (rdbtn_Noturno.isSelected()) {
+						periodoSelecionado = "Noturno";
+					}
+
+					if (periodoSelecionado.equals("")) {
+						JOptionPane.showMessageDialog(null, "Selecione um período!");
+						return;
+					}
+
+					curso.setPeriodo(periodoSelecionado);
+
+					alunoCursoNota = new AlunoCursoNota(aluno, curso, null);
+
+					dao = new LeitorDAO();
+					dao.alterarAlunoCurso(alunoCursoNota);
+
+					JOptionPane.showMessageDialog(null, "Aluno e curso alterados com sucesso!");
+
+				} catch(Exception e1) {
+					JOptionPane.showMessageDialog(null, "ERRO: " + e1.getMessage());
+					e1.printStackTrace();
+				}
+			}
+		});
+
+		btnCursoAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mntmAlterar_Aluno.doClick();
+			}
+		});
+
+
+		mntmConsultar_Aluno.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String rgm = ftf_Rgm.getText();
+
+					dao = new LeitorDAO();
+					alunoCursoNota = dao.consultarAlunoCurso(rgm);
+
+					if (alunoCursoNota == null) {
+						JOptionPane.showMessageDialog(null, "Aluno não encontrado!");
+						return;
+					}
+
+					aluno = alunoCursoNota.getAluno();
+					curso = alunoCursoNota.getCurso();
+
+					ftf_Rgm.setText(aluno.getRgm());
+					ftf_Nome.setText(aluno.getNome());
+
+					String dataBanco = aluno.getData_nasc();
+
+					if (dataBanco != null && dataBanco.contains("-")) {
+						String[] partes = dataBanco.split("-");
+						String dataTela = partes[2] + "/" + partes[1] + "/" + partes[0];
+						ftf_Dt_Nasc.setText(dataTela);
+					} else {
+						ftf_Dt_Nasc.setText(dataBanco);
+					}
+
+					ftf_Cpf.setText(aluno.getCpf());
+					ftf_Email.setText(aluno.getEmail());
+					ftf_Endereco.setText(aluno.getEndereco());
+					ftf_Municipio.setText(aluno.getMunicipio());
+					cb_Uf.setSelectedItem(aluno.getUf());
+					ftf_Celular.setText(aluno.getNumero());
+
+					cb_Curso.setSelectedItem(curso.getCurso());
+					cb_Campus.setSelectedItem(curso.getCampus());
+
+					periodo.clearSelection();
+
+					if (curso.getPeriodo().equals("Matutino")) {
+						rdbtn_Matutino.setSelected(true);
+					} else if (curso.getPeriodo().equals("Vespertino")) {
+						rdbtn_Vespertino.setSelected(true);
+					} else if (curso.getPeriodo().equals("Noturno")) {
+						rdbtn_Noturno.setSelected(true);
+					}
+
+					JOptionPane.showMessageDialog(null, "Aluno encontrado!");
+
+				} catch(Exception e1) {
+					JOptionPane.showMessageDialog(null, "ERRO: " + e1.getMessage());
+					e1.printStackTrace();
+				}
+			}
+		});
+
+		btnCursoConsultar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mntmConsultar_Aluno.doClick();
+			}
+		});
+
 		mntmSalvar_Nf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -561,6 +690,203 @@ public class Gui extends JFrame {
 		btnNfSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mntmSalvar_Nf.doClick();
+			}
+		});
+
+
+		mntmAlterar_Nf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					nota = new Nota();
+
+					nota.setRgm(ftf_Rgm_pesquisa.getText());
+					nota.setDisciplina((String) cb_Disciplina.getSelectedItem());
+					nota.setSemestre((String) cb_Semestre.getSelectedItem());
+					nota.setNota((String) cb_Nota.getSelectedItem());
+					nota.setFaltas(Integer.parseInt(ftf_Faltas.getText()));
+
+					dao = new LeitorDAO();
+					dao.alterarNota(nota);
+
+					JOptionPane.showMessageDialog(null, "Nota alterada com sucesso!");
+
+				} catch(Exception e1) {
+					JOptionPane.showMessageDialog(null, "ERRO: " + e1.getMessage());
+					e1.printStackTrace();
+				}
+			}
+		});
+
+		btnNfAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mntmAlterar_Nf.doClick();
+			}
+		});
+
+
+		mntmConsultar_Nf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String rgm = ftf_Rgm_pesquisa.getText();
+					String disciplina = (String) cb_Disciplina.getSelectedItem();
+					String semestre = (String) cb_Semestre.getSelectedItem();
+
+					dao = new LeitorDAO();
+
+					// Primeiro consulta Aluno + Curso para preencher os campos de resultado desta aba
+					alunoCursoNota = dao.consultarAlunoCurso(rgm);
+
+					if (alunoCursoNota == null) {
+						JOptionPane.showMessageDialog(null, "Aluno não encontrado!");
+						tf_Resultado_Busca_Nome.setText(null);
+						tf_Resultado_Busca_Curso.setText(null);
+						cb_Nota.setSelectedIndex(0);
+						ftf_Faltas.setText(null);
+						return;
+					}
+
+					aluno = alunoCursoNota.getAluno();
+					curso = alunoCursoNota.getCurso();
+
+					tf_Resultado_Busca_Nome.setText(aluno.getNome());
+					tf_Resultado_Busca_Curso.setText(curso.getCurso());
+
+					// Depois consulta a nota da disciplina/semestre selecionados
+					nota = dao.consultarNota(rgm, disciplina, semestre);
+
+					if (nota == null) {
+						JOptionPane.showMessageDialog(null, "Aluno encontrado, mas não existe nota cadastrada para essa disciplina e semestre.");
+						cb_Nota.setSelectedIndex(0);
+						ftf_Faltas.setText(null);
+						return;
+					}
+
+					cb_Nota.setSelectedItem(nota.getNota());
+					ftf_Faltas.setText(String.valueOf(nota.getFaltas()));
+
+					JOptionPane.showMessageDialog(null, "Dados de notas e faltas encontrados!");
+
+				} catch(Exception e1) {
+					JOptionPane.showMessageDialog(null, "ERRO: " + e1.getMessage());
+					e1.printStackTrace();
+				}
+			}
+		});
+
+		btnNfConsultar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mntmConsultar_Nf.doClick();
+			}
+		});
+
+		mntmExcluir_Nf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String rgm = ftf_Rgm_pesquisa.getText();
+					String disciplina = (String) cb_Disciplina.getSelectedItem();
+					String semestre = (String) cb_Semestre.getSelectedItem();
+
+					int resposta = JOptionPane.showConfirmDialog(
+							null,
+							"Deseja excluir a nota desta disciplina e semestre?",
+							"Confirmar exclusão",
+							JOptionPane.YES_NO_OPTION
+					);
+
+					if (resposta != JOptionPane.YES_OPTION) {
+						return;
+					}
+
+					dao = new LeitorDAO();
+					dao.excluirNota(rgm, disciplina, semestre);
+
+					cb_Nota.setSelectedIndex(0);
+					ftf_Faltas.setText(null);
+
+					JOptionPane.showMessageDialog(null, "Nota excluída com sucesso!");
+
+				} catch(Exception e1) {
+					JOptionPane.showMessageDialog(null, "ERRO: " + e1.getMessage());
+					e1.printStackTrace();
+				}
+			}
+		});
+
+		btnNfExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mntmExcluir_Nf.doClick();
+			}
+		});
+
+
+		btnConsultarBoletim.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String rgm = tf_RgmBoletim.getText();
+					String semestre = (String) bc_Selecionar_Semestre.getSelectedItem();
+
+					dao = new LeitorDAO();
+
+					// Consulta os dados do aluno e do curso pelo RGM
+					alunoCursoNota = dao.consultarAlunoCurso(rgm);
+
+					if (alunoCursoNota == null) {
+						JOptionPane.showMessageDialog(null, "Aluno não encontrado!");
+						tf_NomeBoletim.setText(null);
+						tf_CursoBoletim.setText(null);
+						tf_NotaBoletim.setText(null);
+						tf_FaltasBoletim.setText(null);
+						tf_NotaBancoDadosBoletim.setText(null);
+						tf_FaltasBancoDadosBoletim.setText(null);
+						tf_NotaProgramacaoWebBoletim.setText(null);
+						tf_FaltasProgramacaoWebBoletim.setText(null);
+						return;
+					}
+
+					aluno = alunoCursoNota.getAluno();
+					curso = alunoCursoNota.getCurso();
+
+					tf_RgmBoletim.setText(aluno.getRgm());
+					tf_NomeBoletim.setText(aluno.getNome());
+					tf_CursoBoletim.setText(curso.getCurso());
+
+					// Limpa os campos antes de preencher novamente
+					tf_NotaBoletim.setText(null);
+					tf_FaltasBoletim.setText(null);
+					tf_NotaBancoDadosBoletim.setText(null);
+					tf_FaltasBancoDadosBoletim.setText(null);
+					tf_NotaProgramacaoWebBoletim.setText(null);
+					tf_FaltasProgramacaoWebBoletim.setText(null);
+
+					// Consulta todas as notas do aluno naquele semestre
+					List<Nota> notas = dao.consultarNotasPorSemestre(rgm, semestre);
+
+					if (notas.isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Aluno encontrado, mas não há notas cadastradas para esse semestre.");
+						return;
+					}
+
+					for (Nota n : notas) {
+						String disciplina = n.getDisciplina();
+
+						if (disciplina.equals("Programação Orientada a Objeto")) {
+							tf_NotaBoletim.setText(n.getNota());
+							tf_FaltasBoletim.setText(String.valueOf(n.getFaltas()));
+						} else if (disciplina.equals("Banco de dados")) {
+							tf_NotaBancoDadosBoletim.setText(n.getNota());
+							tf_FaltasBancoDadosBoletim.setText(String.valueOf(n.getFaltas()));
+						} else if (disciplina.equals("Programação WEB")) {
+							tf_NotaProgramacaoWebBoletim.setText(n.getNota());
+							tf_FaltasProgramacaoWebBoletim.setText(String.valueOf(n.getFaltas()));
+						}
+					}
+
+					JOptionPane.showMessageDialog(null, "Boletim consultado com sucesso!");
+
+				} catch(Exception e1) {
+					JOptionPane.showMessageDialog(null, "ERRO: " + e1.getMessage());
+					e1.printStackTrace();
+				}
 			}
 		});
 
@@ -605,6 +931,7 @@ public class Gui extends JFrame {
 				cb_Disciplina.setSelectedIndex(0);
 				cb_Semestre.setSelectedIndex(0);
 				cb_Nota.setSelectedIndex(0);
+				bc_Selecionar_Semestre.setSelectedIndex(0);
 				periodo.clearSelection();
 			}
 		});
