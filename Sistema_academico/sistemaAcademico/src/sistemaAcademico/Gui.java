@@ -343,15 +343,15 @@ btn == BUTTOM
 		panel_Notas_Faltas.setLayout(null);
 		
 		 JLabel lblRGM_NF = new JLabel("RGM");
-	        lblRGM_NF.setBounds(10, 15, 27, 14);
+	        lblRGM_NF.setBounds(10, 15, 39, 14);
 	        panel_Notas_Faltas.add(lblRGM_NF);
 
 	        JFormattedTextField ftf_Rgm_pesquisa = new JFormattedTextField();
-	        ftf_Rgm_pesquisa.setBounds(38, 13, 131, 19);
+	        ftf_Rgm_pesquisa.setBounds(51, 13, 131, 19);
 	        panel_Notas_Faltas.add(ftf_Rgm_pesquisa);
 
 	        tf_Resultado_Busca_Nome = new JTextField("Nome do Aluno aparecerá aqui...");
-	        tf_Resultado_Busca_Nome.setBounds(179, 12, 343, 20);
+	        tf_Resultado_Busca_Nome.setBounds(192, 12, 330, 20);
 	        tf_Resultado_Busca_Nome.setEditable(false);
 	        panel_Notas_Faltas.add(tf_Resultado_Busca_Nome);
 
@@ -376,7 +376,7 @@ btn == BUTTOM
 		
 		JComboBox<String> cb_Semestre = new JComboBox<>();
         cb_Semestre.setModel(new DefaultComboBoxModel<>(new String[] {"2025-1", "2025-2", "2026-1", "2026-2"}));
-        cb_Semestre.setBounds(68, 107, 64, 22);
+        cb_Semestre.setBounds(84, 107, 64, 22);
         panel_Notas_Faltas.add(cb_Semestre);
 		
 		JLabel lblNota = new JLabel("Nota");
@@ -431,31 +431,33 @@ btn == BUTTOM
         panel_Boletim.setLayout(null);
 
         JLabel lblRgmBol = new JLabel("RGM do Aluno:");
-        lblRgmBol.setBounds(10, 20, 100, 14);
+        lblRgmBol.setBounds(10, 20, 111, 14);
         panel_Boletim.add(lblRgmBol);
 
         JTextField txtRgmBol = new JTextField();
-        txtRgmBol.setBounds(85, 17, 159, 20);
+        txtRgmBol.setBounds(114, 18, 175, 20);
         panel_Boletim.add(txtRgmBol);
 
         JButton btnGerarBoletim = new JButton("Gerar Boletim");
         btnGerarBoletim.setBounds(312, 16, 130, 23);
         panel_Boletim.add(btnGerarBoletim);
-
-        JTextArea txtAreaBoletim = new JTextArea();
-        txtAreaBoletim.setEditable(false);
-        txtAreaBoletim.setText("Aguardando busca...\n");
         
-        JScrollPane scrollBoletim = new JScrollPane(txtAreaBoletim);
-        scrollBoletim.setBounds(10, 50, 520, 210);
+        JScrollPane scrollBoletim = new JScrollPane();
+        scrollBoletim.setBounds(10, 50, 512, 210);
         panel_Boletim.add(scrollBoletim);
+        
+                JTextArea txtAreaBoletim = new JTextArea();
+                txtAreaBoletim.setBounds(10, 51, 512, 208);
+                panel_Boletim.add(txtAreaBoletim);
+                txtAreaBoletim.setEditable(false);
+                txtAreaBoletim.setText("Aguardando busca...\n");
 
 // Ação fictícia para gerar boletim
         btnGerarBoletim.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 txtAreaBoletim.setText("----------------------------------------------------\n");
-                txtAreaBoletim.append(" BOLETIM DO ALUNO - RGM: " + txtRgmBol.getText() + "\n");
-                txtAreaBoletim.append("----------------------------------------------------\n");
+                txtAreaBoletim.append(" Boletim do Aluno - RGM: " + txtRgmBol.getText() + "\n");
+                txtAreaBoletim.append(" ----------------------------------------------------\n");
                 txtAreaBoletim.append("Disciplina: Programação Orientada a Objetos\n");
                 txtAreaBoletim.append("Nota: 8.5\n");
                 txtAreaBoletim.append("Faltas: 2\n");
