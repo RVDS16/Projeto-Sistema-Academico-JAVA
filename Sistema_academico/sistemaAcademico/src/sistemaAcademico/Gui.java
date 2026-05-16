@@ -343,7 +343,7 @@ btn == BUTTOM
 		panel_Notas_Faltas.setLayout(null);
 		
 		 JLabel lblRGM_NF = new JLabel("RGM");
-	        lblRGM_NF.setBounds(10, 15, 46, 14);
+	        lblRGM_NF.setBounds(10, 15, 27, 14);
 	        panel_Notas_Faltas.add(lblRGM_NF);
 
 	        JFormattedTextField ftf_Rgm_pesquisa = new JFormattedTextField();
@@ -361,17 +361,17 @@ btn == BUTTOM
 	        panel_Notas_Faltas.add(tf_Resultado_Busca_Curso);
 		
 		JLabel lblDisciplina = new JLabel("Disciplina");
-		lblDisciplina.setBounds(10, 79, 64, 14);
+		lblDisciplina.setBounds(10, 79, 62, 14);
 		panel_Notas_Faltas.add(lblDisciplina);
 		
 		JComboBox<String> cb_Disciplina = new JComboBox<>();
         cb_Disciplina.setModel(new DefaultComboBoxModel<>(new String[] 
         		{"Programação Orientada a Objeto", "Banco de dados", "Programação WEB"}));
-        cb_Disciplina.setBounds(58, 75, 464, 22);
+        cb_Disciplina.setBounds(82, 75, 440, 22);
         panel_Notas_Faltas.add(cb_Disciplina);
         
 		JLabel lblSemestre = new JLabel("Semestre");
-		lblSemestre.setBounds(10, 109, 64, 14);
+		lblSemestre.setBounds(10, 109, 55, 14);
 		panel_Notas_Faltas.add(lblSemestre);
 		
 		JComboBox<String> cb_Semestre = new JComboBox<>();
@@ -380,22 +380,22 @@ btn == BUTTOM
         panel_Notas_Faltas.add(cb_Semestre);
 		
 		JLabel lblNota = new JLabel("Nota");
-		lblNota.setBounds(142, 109, 46, 14);
+		lblNota.setBounds(158, 109, 39, 14);
 		panel_Notas_Faltas.add(lblNota);
 		
 		JComboBox<String> cb_Nota = new JComboBox<>();
         cb_Nota.setModel(new DefaultComboBoxModel<>(new String[] 
         		{"0", "0,5", "1", "1,5", "2", "2,5", "3", "3,5", "4", "4,5", "5", "5,5",
         				"6", "6,5", "7", "7,5", "8", "8,5", "9", "9,5", "10"}));
-        cb_Nota.setBounds(170, 107, 55, 22);
+        cb_Nota.setBounds(192, 107, 55, 22);
         panel_Notas_Faltas.add(cb_Nota);
 		
 		JLabel lblFaltas = new JLabel("Faltas");
-		lblFaltas.setBounds(237, 109, 46, 14);
+		lblFaltas.setBounds(257, 109, 50, 14);
 		panel_Notas_Faltas.add(lblFaltas);
 		
 		JFormattedTextField ftf_Faltas = new JFormattedTextField();
-		ftf_Faltas.setBounds(277, 109, 81, 20);
+		ftf_Faltas.setBounds(295, 107, 81, 22);
 		panel_Notas_Faltas.add(ftf_Faltas);
 		
 		JButton btnNewButton_5 = new JButton("New button");
