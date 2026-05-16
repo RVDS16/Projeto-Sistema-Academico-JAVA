@@ -9,7 +9,6 @@ public class Aluno {
 	private String email;
 	private String numero;
 	private String endereco;
-	private String complemento;
 	private String municipio;
 	private String uf;
 	
@@ -17,7 +16,7 @@ public class Aluno {
 	public Aluno() {
 	}
 	public Aluno(String rgm, String cpf, String nome, String data_nasc, String email, String numero, String endereco,
-			String complemento, String municipio, String uf) {
+			String municipio, String uf) {
 		super();
 		this.rgm = rgm;
 		this.cpf = cpf;
@@ -26,7 +25,6 @@ public class Aluno {
 		this.email = email;
 		this.numero = numero;
 		this.endereco = endereco;
-		this.complemento = complemento;
 		this.municipio = municipio;
 		this.uf = uf;
 	}
@@ -72,12 +70,6 @@ public class Aluno {
 	}
 	public void setEndereco(String endereco) {
 		this.endereco = endereco;
-	}
-	public String getComplemento() {
-		return complemento;
-	}
-	public void setComplemento(String complemento) {
-		this.complemento = complemento;
 	}
 	public String getMunicipio() {
 		return municipio;
