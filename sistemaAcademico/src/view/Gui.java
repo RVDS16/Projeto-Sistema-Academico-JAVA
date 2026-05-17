@@ -74,6 +74,7 @@ public class Gui extends JFrame {
 	public Gui() throws Exception {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 573, 379);
+		 setResizable(false);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -662,6 +663,54 @@ public class Gui extends JFrame {
 		btnCursoConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mntmConsultar_Aluno.doClick();
+			}
+		});
+
+
+		mntmExcluir_Aluno.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					String rgm = ftf_Rgm.getText();
+
+					int resposta = JOptionPane.showConfirmDialog(
+							null,
+							"Deseja excluir este aluno, curso e todas as notas dele?",
+							"Confirmar exclusão",
+							JOptionPane.YES_NO_OPTION
+					);
+
+					if (resposta != JOptionPane.YES_OPTION) {
+						return;
+					}
+
+					dao = new LeitorDAO();
+					dao.excluirAluno(rgm);
+
+					ftf_Rgm.setText(null);
+					ftf_Nome.setText(null);
+					ftf_Dt_Nasc.setText(null);
+					ftf_Cpf.setText(null);
+					ftf_Email.setText(null);
+					ftf_Endereco.setText(null);
+					ftf_Municipio.setText(null);
+					ftf_Celular.setText(null);
+					cb_Uf.setSelectedIndex(0);
+					cb_Curso.setSelectedIndex(0);
+					cb_Campus.setSelectedIndex(0);
+					periodo.clearSelection();
+
+					JOptionPane.showMessageDialog(null, "Aluno excluído com sucesso!");
+
+				} catch(Exception e1) {
+					JOptionPane.showMessageDialog(null, "ERRO: " + e1.getMessage());
+					e1.printStackTrace();
+				}
+			}
+		});
+
+		btnCursoExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mntmExcluir_Aluno.doClick();
 			}
 		});
 
