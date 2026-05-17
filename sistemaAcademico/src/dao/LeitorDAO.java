@@ -14,10 +14,12 @@ import util.ConnectionFactory;
 
 public class LeitorDAO {
 
+	// Objetos principais para conversar com o banco
 	private Connection conn;
 	private PreparedStatement ps;
 	private ResultSet rs;
 
+	// Quando o DAO é criado, a conexão com o banco já é aberta
 	public LeitorDAO() throws Exception {
 		try {
 			conn = ConnectionFactory.getConnection();
@@ -26,8 +28,11 @@ public class LeitorDAO {
 		}
 	}
 
+	// ===================== INÍCIO: SALVAR ALUNO E CURSO =====================
+	// Salva primeiro o aluno e depois o curso, porque o curso depende do RGM do aluno.
 	public void salvarAlunoCurso(AlunoCursoNota alunoCursoNota) throws Exception {
 		try {
+			// Separa o objeto "caixinha" em aluno e curso para salvar em tabelas diferentes
 			Aluno aluno = alunoCursoNota.getAluno();
 			Curso curso = alunoCursoNota.getCurso();
 
@@ -36,6 +41,7 @@ public class LeitorDAO {
 
 			ps = conn.prepareStatement(sqlAluno);
 
+			// Preenche os ? do INSERT do aluno na mesma ordem das colunas
 			ps.setString(1, aluno.getRgm());
 			ps.setString(2, aluno.getCpf());
 			ps.setString(3, aluno.getNome());
@@ -56,6 +62,8 @@ public class LeitorDAO {
 			ps.setString(1, curso.getCurso());
 			ps.setString(2, curso.getCampus());
 			ps.setString(3, curso.getPeriodo());
+
+			// Aqui o RGM do aluno vira chave estrangeira na tabela de curso
 			ps.setString(4, aluno.getRgm());
 
 			ps.executeUpdate();
@@ -64,7 +72,10 @@ public class LeitorDAO {
 			throw new Exception("ERRO AO SALVAR ALUNO E CURSO: " + e.getMessage());
 		}
 	}
+	// ===================== FIM: SALVAR ALUNO E CURSO =====================
 
+	// ===================== INÍCIO: ALTERAR ALUNO E CURSO =====================
+	// Atualiza os dados usando o RGM como referência. O RGM identifica qual registro será alterado.
 	public void alterarAlunoCurso(AlunoCursoNota alunoCursoNota) throws Exception {
 		try {
 			Aluno aluno = alunoCursoNota.getAluno();
@@ -83,6 +94,8 @@ public class LeitorDAO {
 			ps.setString(6, aluno.getEndereco());
 			ps.setString(7, aluno.getMunicipio());
 			ps.setString(8, aluno.getUf());
+
+			// O último parâmetro é o RGM usado no WHERE
 			ps.setString(9, aluno.getRgm());
 
 			ps.executeUpdate();
@@ -103,7 +116,10 @@ public class LeitorDAO {
 			throw new Exception("ERRO AO ALTERAR ALUNO E CURSO: " + e.getMessage());
 		}
 	}
+	// ===================== FIM: ALTERAR ALUNO E CURSO =====================
 
+	// ===================== INÍCIO: SALVAR NOTA =====================
+	// Cadastra uma nota para uma disciplina de um aluno em determinado semestre.
 	public void salvarNota(Nota nota) throws Exception {
 		try {
 			String sqlNota = "INSERT INTO tb_notas(disciplina, semestre, nota, faltas, fk_rgm) "
@@ -115,6 +131,8 @@ public class LeitorDAO {
 			ps.setString(2, nota.getSemestre());
 			ps.setString(3, nota.getNota());
 			ps.setInt(4, nota.getFaltas());
+
+			// Liga a nota ao aluno pelo RGM
 			ps.setString(5, nota.getRgm());
 
 			ps.executeUpdate();
@@ -123,7 +141,10 @@ public class LeitorDAO {
 			throw new Exception("ERRO AO SALVAR NOTA: " + e.getMessage());
 		}
 	}
+	// ===================== FIM: SALVAR NOTA =====================
 
+	// ===================== INÍCIO: ALTERAR NOTA =====================
+	// Altera apenas nota e faltas. A disciplina e o semestre servem para localizar o registro certo.
 	public void alterarNota(Nota nota) throws Exception {
 		try {
 			String sqlNota = "UPDATE tb_notas SET nota = ?, faltas = ? "
@@ -133,6 +154,8 @@ public class LeitorDAO {
 
 			ps.setString(1, nota.getNota());
 			ps.setInt(2, nota.getFaltas());
+
+			// Esses três campos identificam exatamente qual nota deve ser alterada
 			ps.setString(3, nota.getRgm());
 			ps.setString(4, nota.getDisciplina());
 			ps.setString(5, nota.getSemestre());
@@ -143,7 +166,10 @@ public class LeitorDAO {
 			throw new Exception("ERRO AO ALTERAR NOTA: " + e.getMessage());
 		}
 	}
+	// ===================== FIM: ALTERAR NOTA =====================
 
+	// ===================== INÍCIO: CONSULTAR ALUNO E CURSO =====================
+	// Busca os dados do aluno junto com o curso. O JOIN junta as duas tabelas pelo RGM.
 	public AlunoCursoNota consultarAlunoCurso(String rgm) throws Exception {
 		try {
 			String sql = "SELECT "
@@ -158,7 +184,9 @@ public class LeitorDAO {
 
 			rs = ps.executeQuery();
 
+			// Se rs.next() for verdadeiro, significa que encontrou um aluno com esse RGM
 			if (rs.next()) {
+				// Monta o objeto Aluno com os dados que vieram do banco
 				Aluno aluno = new Aluno(
 						rs.getString("pk_rgm"),
 						rs.getString("pk_cpf"),
@@ -171,22 +199,28 @@ public class LeitorDAO {
 						rs.getString("uf")
 				);
 
+				// Monta o objeto Curso com os dados da tabela tb_curso
 				Curso curso = new Curso(
 						rs.getString("curso"),
 						rs.getString("campus"),
 						rs.getString("periodo")
 				);
 
+				// Retorna os dois objetos juntos para a tela conseguir preencher os campos
 				return new AlunoCursoNota(aluno, curso, null);
 			}
 
+			// Se não encontrou nada, retorna null para a tela tratar como "não encontrado"
 			return null;
 
 		} catch (Exception e) {
 			throw new Exception("ERRO AO CONSULTAR ALUNO E CURSO: " + e.getMessage());
 		}
 	}
+	// ===================== FIM: CONSULTAR ALUNO E CURSO =====================
 
+	// ===================== INÍCIO: CONSULTAR NOTA =====================
+	// Consulta uma nota específica. Aqui não basta só o RGM, porque o aluno pode ter várias disciplinas.
 	public Nota consultarNota(String rgm, String disciplina, String semestre) throws Exception {
 		try {
 			String sql = "SELECT id_nota, disciplina, semestre, nota, faltas, fk_rgm "
@@ -201,6 +235,7 @@ public class LeitorDAO {
 
 			rs = ps.executeQuery();
 
+			// Se encontrou a combinação RGM + disciplina + semestre, cria o objeto Nota
 			if (rs.next()) {
 				Nota nota = new Nota();
 
@@ -220,7 +255,10 @@ public class LeitorDAO {
 			throw new Exception("ERRO AO CONSULTAR NOTA: " + e.getMessage());
 		}
 	}
+	// ===================== FIM: CONSULTAR NOTA =====================
 
+	// ===================== INÍCIO: EXCLUIR ALUNO =====================
+	// A exclusão segue essa ordem por causa das chaves estrangeiras: notas -> curso -> aluno.
 	public void excluirAluno(String rgm) throws Exception {
 		try {
 			String sqlNotas = "DELETE FROM tb_notas WHERE fk_rgm = ?";
@@ -242,7 +280,10 @@ public class LeitorDAO {
 			throw new Exception("ERRO AO EXCLUIR ALUNO: " + e.getMessage());
 		}
 	}
+	// ===================== FIM: EXCLUIR ALUNO =====================
 
+	// ===================== INÍCIO: EXCLUIR NOTA =====================
+	// Remove somente uma nota, sem apagar o cadastro do aluno nem o curso.
 	public void excluirNota(String rgm, String disciplina, String semestre) throws Exception {
 		try {
 			String sqlNota = "DELETE FROM tb_notas "
@@ -260,8 +301,12 @@ public class LeitorDAO {
 			throw new Exception("ERRO AO EXCLUIR NOTA: " + e.getMessage());
 		}
 	}
+	// ===================== FIM: EXCLUIR NOTA =====================
 
+	// ===================== INÍCIO: CONSULTAR NOTAS POR SEMESTRE =====================
+	// Usado no boletim para trazer todas as notas do aluno em um semestre.
 	public List<Nota> consultarNotasPorSemestre(String rgm, String semestre) throws Exception {
+		// Lista que vai guardar todas as notas encontradas no SELECT
 		List<Nota> lista = new ArrayList<Nota>();
 
 		try {
@@ -276,6 +321,7 @@ public class LeitorDAO {
 
 			rs = ps.executeQuery();
 
+			// O while é usado porque podem existir várias notas no mesmo semestre
 			while (rs.next()) {
 				Nota nota = new Nota();
 
@@ -286,6 +332,7 @@ public class LeitorDAO {
 				nota.setFaltas(rs.getInt("faltas"));
 				nota.setRgm(rs.getString("fk_rgm"));
 
+				// Cada nota encontrada é adicionada na lista para depois aparecer no boletim
 				lista.add(nota);
 			}
 
@@ -295,5 +342,6 @@ public class LeitorDAO {
 			throw new Exception("ERRO AO CONSULTAR NOTAS DO SEMESTRE: " + e.getMessage());
 		}
 	}
+	// ===================== FIM: CONSULTAR NOTAS POR SEMESTRE =====================
 
 }

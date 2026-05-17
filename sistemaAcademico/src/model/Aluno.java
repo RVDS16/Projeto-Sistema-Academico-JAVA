@@ -1,7 +1,8 @@
 package model;
 
 public class Aluno {
-	//Atributos
+
+	// Dados principais do aluno
 	private String rgm;
 	private String cpf;
 	private String nome;
@@ -12,9 +13,11 @@ public class Aluno {
 	private String municipio;
 	private String uf;
 	
-	//Construtores
+	// Construtor vazio usado quando quero criar o aluno e preencher depois com setters
 	public Aluno() {
 	}
+
+	// Construtor completo, usado quando já tenho todos os dados do aluno de uma vez
 	public Aluno(String rgm, String cpf, String nome, String data_nasc, String email, String numero, String endereco,
 			String municipio, String uf) {
 		super();
@@ -28,61 +31,77 @@ public class Aluno {
 		this.municipio = municipio;
 		this.uf = uf;
 	}
-	//Getters Setters
+
+	// Getters e setters: servem para acessar e alterar os atributos privados da classe
 	public String getRgm() {
 		return rgm;
 	}
+
 	public void setRgm(String rgm) {
 		this.rgm = rgm;
 	}
+
 	public String getCpf() {
 		return cpf;
 	}
+
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
+
 	public String getNome() {
 		return nome;
 	}
+
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
 	public String getData_nasc() {
 		return data_nasc;
 	}
+
 	public void setData_nasc(String data_nasc) {
 		this.data_nasc = data_nasc;
 	}
+
 	public String getEmail() {
 		return email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	public String getNumero() {
 		return numero;
 	}
+
 	public void setNumero(String numero) {
 		this.numero = numero;
 	}
+
 	public String getEndereco() {
 		return endereco;
 	}
+
 	public void setEndereco(String endereco) {
 		this.endereco = endereco;
 	}
+
 	public String getMunicipio() {
 		return municipio;
 	}
+
 	public void setMunicipio(String municipio) {
 		this.municipio = municipio;
 	}
+
 	public String getUf() {
 		return uf;
 	}
+
 	public void setUf(String uf) {
 		this.uf = uf;
 	}
-	
-	
 }

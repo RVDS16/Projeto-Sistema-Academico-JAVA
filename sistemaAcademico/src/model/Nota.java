@@ -2,6 +2,7 @@ package model;
 
 public class Nota {
     
+    // Dados da nota cadastrada para uma disciplina do aluno
     private int idNota;
     private String disciplina;
     private String semestre;
@@ -9,9 +10,11 @@ public class Nota {
     private int faltas;
     private String rgm;
     
+    // Construtor vazio usado quando quero criar a nota e preencher depois com setters
     public Nota() {
     }
 
+    // Construtor completo, usado quando já tenho os dados da nota de uma vez
     public Nota(String disciplina, String semestre, String nota, int faltas, String rgm) {
         this.disciplina = disciplina;
         this.semestre = semestre;
@@ -20,6 +23,7 @@ public class Nota {
         this.rgm = rgm;
     }
 
+    // Getters e setters: servem para acessar e alterar os atributos privados da classe
     public int getIdNota() {
         return idNota;
     }
