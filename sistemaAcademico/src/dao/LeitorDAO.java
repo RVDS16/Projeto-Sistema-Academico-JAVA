@@ -36,7 +36,7 @@ public class LeitorDAO {
 			Aluno aluno = alunoCursoNota.getAluno();
 			Curso curso = alunoCursoNota.getCurso();
 
-			String sqlAluno = "INSERT INTO tb_aluno(pk_rgm, pk_cpf, nome, data_nasc, email, numero, endereco, municipio, uf) "
+			String sqlAluno = "INSERT INTO tb_aluno(pk_rgm, cpf, nome, data_nasc, email, numero, endereco, municipio, uf) "
 					+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 			ps = conn.prepareStatement(sqlAluno);
@@ -54,18 +54,18 @@ public class LeitorDAO {
 
 			ps.executeUpdate();
 
-			String sqlCurso = "INSERT INTO tb_curso(curso, campus, periodo, fk_rgm) "
+			String sqlCurso = "INSERT INTO tb_curso(fk_rgm, pk_curso, campus, periodo) "
 					+ "VALUES(?, ?, ?, ?)";
 
 			// Prepara o comando do curso depois que o aluno já foi salvo
 			ps = conn.prepareStatement(sqlCurso);
 
-			ps.setString(1, curso.getCurso());
-			ps.setString(2, curso.getCampus());
-			ps.setString(3, curso.getPeriodo());
+            // Aqui o RGM do aluno vira chave estrangeira na tabela de curso
+            ps.setString(1, aluno.getRgm());
 
-			// Aqui o RGM do aluno vira chave estrangeira na tabela de curso
-			ps.setString(4, aluno.getRgm());
+			ps.setString(2, curso.getCurso());
+			ps.setString(3, curso.getCampus());
+			ps.setString(4, curso.getPeriodo());
 
 			ps.executeUpdate();
 
@@ -82,26 +82,26 @@ public class LeitorDAO {
 			Aluno aluno = alunoCursoNota.getAluno();
 			Curso curso = alunoCursoNota.getCurso();
 
-			String sqlAluno = "UPDATE tb_aluno SET pk_cpf = ?, nome = ?, data_nasc = ?, email = ?, numero = ?, endereco = ?, municipio = ?, uf = ? "
+			String sqlAluno = "UPDATE tb_aluno SET cpf = ?, nome = ?, data_nasc = ?, email = ?, numero = ?, endereco = ?, municipio = ?, uf = ? "
 					+ "WHERE pk_rgm = ?";
 
 			ps = conn.prepareStatement(sqlAluno);
 
-			ps.setString(1, aluno.getCpf());
-			ps.setString(2, aluno.getNome());
-			ps.setString(3, aluno.getData_nasc());
-			ps.setString(4, aluno.getEmail());
-			ps.setString(5, aluno.getNumero());
-			ps.setString(6, aluno.getEndereco());
-			ps.setString(7, aluno.getMunicipio());
-			ps.setString(8, aluno.getUf());
+			ps.setString(2, aluno.getCpf());
+			ps.setString(3, aluno.getNome());
+			ps.setString(4, aluno.getData_nasc());
+			ps.setString(5, aluno.getEmail());
+			ps.setString(6, aluno.getNumero());
+			ps.setString(7, aluno.getEndereco());
+			ps.setString(8, aluno.getMunicipio());
+			ps.setString(9, aluno.getUf());
 
 			// O último parâmetro é o RGM usado no WHERE
-			ps.setString(9, aluno.getRgm());
+			ps.setString(1, aluno.getRgm());
 
 			ps.executeUpdate();
 
-			String sqlCurso = "UPDATE tb_curso SET curso = ?, campus = ?, periodo = ? "
+			String sqlCurso = "UPDATE tb_curso SET pk_curso = ?, campus = ?, periodo = ? "
 					+ "WHERE fk_rgm = ?";
 
 			ps = conn.prepareStatement(sqlCurso);
@@ -123,19 +123,19 @@ public class LeitorDAO {
 	// Cadastra uma nota para uma disciplina de um aluno em determinado semestre.
 	public void salvarNota(Nota nota) throws Exception {
 		try {
-			String sqlNota = "INSERT INTO tb_notas(disciplina, semestre, nota, faltas, fk_rgm) "
+			String sqlNota = "INSERT INTO tb_notas(fk_rgm, disciplina, semestre, nota, faltas) "
 					+ "VALUES(?, ?, ?, ?, ?)";
 
 			// Prepara o comando SQL da tabela de notas
 			ps = conn.prepareStatement(sqlNota);
 
-			ps.setString(1, nota.getDisciplina());
-			ps.setString(2, nota.getSemestre());
-			ps.setString(3, nota.getNota());
-			ps.setInt(4, nota.getFaltas());
+			ps.setString(2, nota.getDisciplina());
+			ps.setString(3, nota.getSemestre());
+			ps.setString(4, nota.getNota());
+			ps.setInt(5, nota.getFaltas());
 
 			// Liga a nota ao aluno pelo RGM
-			ps.setString(5, nota.getRgm());
+			ps.setString(1, nota.getRgm());
 
 			ps.executeUpdate();
 
@@ -175,11 +175,11 @@ public class LeitorDAO {
 	public AlunoCursoNota consultarAlunoCurso(String rgm) throws Exception {
 		try {
 			String sql = "SELECT "
-					+ "a.pk_rgm, a.pk_cpf, a.nome, a.data_nasc, a.email, a.numero, a.endereco, a.municipio, a.uf, "
-					+ "c.curso, c.campus, c.periodo "
-					+ "FROM tb_aluno a "
-					+ "INNER JOIN tb_curso c ON a.pk_rgm = c.fk_rgm "
-					+ "WHERE a.pk_rgm = ?";
+					+ " a.pk_rgm, a.cpf, a.nome, a.data_nasc, a.email, a.numero, a.endereco, a.municipio, a.uf, "
+					+ "c.pk_curso, c.campus, c.periodo "
+					+ " FROM tb_aluno a "
+					+ " INNER JOIN tb_curso c ON a.pk_rgm = c.fk_rgm "
+					+ " WHERE a.pk_rgm = ? ";
 
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, rgm);
@@ -192,7 +192,7 @@ public class LeitorDAO {
 				// Monta o objeto Aluno com os dados que vieram do banco
 				Aluno aluno = new Aluno(
 						rs.getString("pk_rgm"),
-						rs.getString("pk_cpf"),
+						rs.getString("cpf"),
 						rs.getString("nome"),
 						rs.getString("data_nasc"),
 						rs.getString("email"),
@@ -204,7 +204,7 @@ public class LeitorDAO {
 
 				// Monta o objeto Curso com os dados da tabela tb_curso
 				Curso curso = new Curso(
-						rs.getString("curso"),
+						rs.getString("pk_curso"),
 						rs.getString("campus"),
 						rs.getString("periodo")
 				);
@@ -227,7 +227,7 @@ public class LeitorDAO {
 	public Nota consultarNota(String rgm, String disciplina, String semestre) throws Exception {
 		try {
 			// SELECT usado para buscar todas as disciplinas/notas que pertencem ao RGM informado
-			String sql = "SELECT id_nota, disciplina, semestre, nota, faltas, fk_rgm "
+			String sql = "SELECT fk_rgm, disciplina, semestre, nota, faltas "
 					+ "FROM tb_notas "
 					+ "WHERE fk_rgm = ? AND disciplina = ? AND semestre = ?";
 
@@ -244,12 +244,12 @@ public class LeitorDAO {
 				// Cria um objeto Nota para guardar os dados encontrados no ResultSet
 				Nota nota = new Nota();
 
-				nota.setIdNota(rs.getInt("id_nota"));
-				nota.setDisciplina(rs.getString("disciplina"));
+                nota.setRgm(rs.getString("fk_rgm"));
+                nota.setDisciplina(rs.getString("disciplina"));
 				nota.setSemestre(rs.getString("semestre"));
 				nota.setNota(rs.getString("nota"));
 				nota.setFaltas(rs.getInt("faltas"));
-				nota.setRgm(rs.getString("fk_rgm"));
+
 
 				return nota;
 			}
@@ -315,7 +315,7 @@ public class LeitorDAO {
 		List<Nota> lista = new ArrayList<Nota>();
 
 		try {
-			String sql = "SELECT id_nota, disciplina, semestre, nota, faltas, fk_rgm "
+			String sql = "SELECT fk_rgm, disciplina, semestre, nota, faltas "
 					+ "FROM tb_notas "
 					+ "WHERE fk_rgm = ? AND semestre = ?";
 
@@ -332,12 +332,12 @@ public class LeitorDAO {
 			while (rs.next()) {
 				Nota nota = new Nota();
 
-				nota.setIdNota(rs.getInt("id_nota"));
-				nota.setDisciplina(rs.getString("disciplina"));
+                nota.setRgm(rs.getString("fk_rgm"));
+                nota.setDisciplina(rs.getString("disciplina"));
 				nota.setSemestre(rs.getString("semestre"));
 				nota.setNota(rs.getString("nota"));
 				nota.setFaltas(rs.getInt("faltas"));
-				nota.setRgm(rs.getString("fk_rgm"));
+
 
 				// Cada nota encontrada é adicionada na lista para depois aparecer no boletim
 				// Adiciona cada nota encontrada na lista que será devolvida para a tela
@@ -361,10 +361,10 @@ public class LeitorDAO {
 
 		try {
 			// SELECT usado para buscar todas as disciplinas/notas que pertencem ao RGM informado
-			String sql = "SELECT id_nota, disciplina, semestre, nota, faltas, fk_rgm "
+			String sql = "SELECT  fk_rgm, disciplina, semestre, nota, faltas "
 					+ "FROM tb_notas "
 					+ "WHERE fk_rgm = ? "
-					+ "ORDER BY semestre, disciplina"; // ordena o boletim para ficar mais organizado // organiza o resultado por semestre e disciplina
+					+ "ORDER BY fk_rgm, semestre, disciplina"; // ordena o boletim para ficar mais organizado // organiza o resultado por semestre e disciplina
 
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, rgm);
@@ -375,12 +375,11 @@ public class LeitorDAO {
 			while (rs.next()) {
 				Nota nota = new Nota();
 
-				nota.setIdNota(rs.getInt("id_nota"));
+                nota.setRgm(rs.getString("fk_rgm"));
 				nota.setDisciplina(rs.getString("disciplina"));
 				nota.setSemestre(rs.getString("semestre"));
 				nota.setNota(rs.getString("nota"));
 				nota.setFaltas(rs.getInt("faltas"));
-				nota.setRgm(rs.getString("fk_rgm"));
 
 				// Adiciona cada nota encontrada na lista que será devolvida para a tela
 				lista.add(nota);

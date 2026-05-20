@@ -360,9 +360,8 @@ public class Gui extends JFrame {
 
 
 
-		JButton btnConsultarBoletim = new JButton("");
-		btnConsultarBoletim.setIcon(new ImageIcon("C:\\Users\\Pichau\\Documents\\Projeto-Sistema-Academico-JAVA\\sistemaAcademico\\img\\consultar.png"));
-		btnConsultarBoletim.setBounds(451, 132, 71, 73);
+		JButton btnConsultarBoletim = new JButton("Gerar");
+		btnConsultarBoletim.setBounds(451, 132, 71, 50);
 		panel_Boletim.add(btnConsultarBoletim);
 		
 		// Área com rolagem onde o boletim em texto será exibido

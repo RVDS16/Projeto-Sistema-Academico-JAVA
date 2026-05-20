@@ -3,7 +3,6 @@ package model;
 public class Nota {
     
     // Dados da nota cadastrada para uma disciplina do aluno
-    private int idNota;
     private String disciplina;
     private String semestre;
     private String nota;
@@ -24,13 +23,8 @@ public class Nota {
     }
 
     // Getters e setters: servem para acessar e alterar os atributos privados da classe
-    public int getIdNota() {
-        return idNota;
-    }
 
-    public void setIdNota(int idNota) {
-        this.idNota = idNota;
-    }
+
 
     public String getDisciplina() {
         return disciplina;
