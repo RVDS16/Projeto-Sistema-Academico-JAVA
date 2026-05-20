@@ -33,6 +33,8 @@ import model.Aluno;
 import model.AlunoCursoNota;
 import model.Curso;
 import model.Nota;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 public class Gui extends JFrame {
 
@@ -49,12 +51,6 @@ public class Gui extends JFrame {
 	private JTextField tf_NomeBoletim;
 	private JTextField tf_RgmBoletim;
 	private JTextField tf_CursoBoletim;
-	private JTextField tf_NotaBoletim;
-	private JTextField tf_FaltasBoletim;
-	private JTextField tf_NotaBancoDadosBoletim;
-	private JTextField tf_FaltasBancoDadosBoletim;
-	private JTextField tf_NotaProgramacaoWebBoletim;
-	private JTextField tf_FaltasProgramacaoWebBoletim;
 
 	// Objetos usados para levar os dados da tela para as classes model e para o DAO
 	private Aluno aluno;
@@ -81,7 +77,7 @@ public class Gui extends JFrame {
 	public Gui() throws Exception {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 573, 379);
-		 setResizable(false);
+		setResizable(false);
 
 		// Criação da barra de menu superior
 		JMenuBar menuBar = new JMenuBar();
@@ -267,26 +263,6 @@ public class Gui extends JFrame {
 		periodo.add(rdbtn_Vespertino);
 		periodo.add(rdbtn_Noturno);
 
-		JButton btnCursoSalvar = new JButton("");
-		btnCursoSalvar.setIcon(new ImageIcon("C:\\Users\\Pichau\\Documents\\Projeto-Sistema-Academico-JAVA\\sistemaAcademico\\img\\salvar.png"));
-		btnCursoSalvar.setBounds(10, 126, 93, 66);
-		panel_Curso.add(btnCursoSalvar);
-
-		JButton btnCursoAlterar = new JButton("");
-		btnCursoAlterar.setIcon(new ImageIcon("C:\\Users\\Pichau\\Documents\\Projeto-Sistema-Academico-JAVA\\sistemaAcademico\\img\\alterar.png"));
-		btnCursoAlterar.setBounds(138, 126, 93, 66);
-		panel_Curso.add(btnCursoAlterar);
-
-		JButton btnCursoConsultar = new JButton("");
-		btnCursoConsultar.setIcon(new ImageIcon("C:\\Users\\Pichau\\Documents\\Projeto-Sistema-Academico-JAVA\\sistemaAcademico\\img\\consultar.png"));
-		btnCursoConsultar.setBounds(298, 126, 89, 66);
-		panel_Curso.add(btnCursoConsultar);
-
-		JButton btnCursoExcluir = new JButton("");
-		btnCursoExcluir.setIcon(new ImageIcon("C:\\Users\\Pichau\\Documents\\Projeto-Sistema-Academico-JAVA\\sistemaAcademico\\img\\excluir.png"));
-		btnCursoExcluir.setBounds(433, 126, 89, 66);
-		panel_Curso.add(btnCursoExcluir);
-
 		// ===================== ABA NOTAS E FALTAS =====================
 		// Nesta aba ficam o cadastro, alteração, consulta e exclusão das notas
 		JPanel panel_Notas_Faltas = new JPanel();
@@ -348,26 +324,6 @@ public class Gui extends JFrame {
 		ftf_Faltas.setBounds(277, 102, 81, 20);
 		panel_Notas_Faltas.add(ftf_Faltas);
 
-		JButton btnNfSalvar = new JButton("");
-		btnNfSalvar.setIcon(new ImageIcon("C:\\Users\\Pichau\\Documents\\Projeto-Sistema-Academico-JAVA\\sistemaAcademico\\img\\salvar.png"));
-		btnNfSalvar.setBounds(10, 139, 93, 66);
-		panel_Notas_Faltas.add(btnNfSalvar);
-
-		JButton btnNfAlterar = new JButton("");
-		btnNfAlterar.setIcon(new ImageIcon("C:\\Users\\Pichau\\Documents\\Projeto-Sistema-Academico-JAVA\\sistemaAcademico\\img\\alterar.png"));
-		btnNfAlterar.setBounds(138, 139, 93, 66);
-		panel_Notas_Faltas.add(btnNfAlterar);
-
-		JButton btnNfConsultar = new JButton("");
-		btnNfConsultar.setIcon(new ImageIcon("C:\\Users\\Pichau\\Documents\\Projeto-Sistema-Academico-JAVA\\sistemaAcademico\\img\\consultar.png"));
-		btnNfConsultar.setBounds(298, 139, 89, 66);
-		panel_Notas_Faltas.add(btnNfConsultar);
-
-		JButton btnNfExcluir = new JButton("");
-		btnNfExcluir.setIcon(new ImageIcon("C:\\Users\\Pichau\\Documents\\Projeto-Sistema-Academico-JAVA\\sistemaAcademico\\img\\excluir.png"));
-		btnNfExcluir.setBounds(433, 139, 89, 66);
-		panel_Notas_Faltas.add(btnNfExcluir);
-
 		// ===================== ABA BOLETIM =====================
 		// Nesta aba o boletim é montado a partir do RGM e do semestre escolhido
 		JPanel panel_Boletim = new JPanel();
@@ -402,91 +358,22 @@ public class Gui extends JFrame {
 		tf_CursoBoletim.setColumns(10);
 		tf_CursoBoletim.setEditable(false);
 
-		JLabel lblPooBoletim = new JLabel("Programação Orientada a Objetos");
-		lblPooBoletim.setBounds(10, 64, 233, 14);
-		panel_Boletim.add(lblPooBoletim);
 
-		JLabel lblNotaPooBoletim = new JLabel("Nota");
-		lblNotaPooBoletim.setBounds(10, 89, 46, 14);
-		panel_Boletim.add(lblNotaPooBoletim);
-
-		tf_NotaBoletim = new JTextField();
-		tf_NotaBoletim.setBounds(50, 89, 46, 20);
-		panel_Boletim.add(tf_NotaBoletim);
-		tf_NotaBoletim.setColumns(10);
-		tf_NotaBoletim.setEditable(false);
-
-		JLabel lblFaltasPooBoletim = new JLabel("Faltas");
-		lblFaltasPooBoletim.setBounds(125, 89, 46, 14);
-		panel_Boletim.add(lblFaltasPooBoletim);
-
-		tf_FaltasBoletim = new JTextField();
-		tf_FaltasBoletim.setBounds(170, 89, 46, 20);
-		panel_Boletim.add(tf_FaltasBoletim);
-		tf_FaltasBoletim.setColumns(10);
-		tf_FaltasBoletim.setEditable(false);
-
-		JLabel lblBancoDadosBoletim = new JLabel("Banco de Dados");
-		lblBancoDadosBoletim.setBounds(10, 120, 95, 14);
-		panel_Boletim.add(lblBancoDadosBoletim);
-
-		JLabel lblNotaBancoDadosBoletim = new JLabel("Nota");
-		lblNotaBancoDadosBoletim.setBounds(10, 145, 46, 14);
-		panel_Boletim.add(lblNotaBancoDadosBoletim);
-
-		tf_NotaBancoDadosBoletim = new JTextField();
-		tf_NotaBancoDadosBoletim.setEditable(false);
-		tf_NotaBancoDadosBoletim.setColumns(10);
-		tf_NotaBancoDadosBoletim.setBounds(50, 145, 46, 20);
-		panel_Boletim.add(tf_NotaBancoDadosBoletim);
-
-		JLabel lblFaltasBancoDadosBoletim = new JLabel("Faltas");
-		lblFaltasBancoDadosBoletim.setBounds(125, 145, 46, 14);
-		panel_Boletim.add(lblFaltasBancoDadosBoletim);
-
-		tf_FaltasBancoDadosBoletim = new JTextField();
-		tf_FaltasBancoDadosBoletim.setEditable(false);
-		tf_FaltasBancoDadosBoletim.setColumns(10);
-		tf_FaltasBancoDadosBoletim.setBounds(170, 142, 46, 20);
-		panel_Boletim.add(tf_FaltasBancoDadosBoletim);
-
-		JLabel lblProgramacaoWebBoletim = new JLabel("Programação WEB");
-		lblProgramacaoWebBoletim.setBounds(10, 170, 116, 14);
-		panel_Boletim.add(lblProgramacaoWebBoletim);
-
-		JLabel lblNotaProgramacaoWebBoletim = new JLabel("Nota");
-		lblNotaProgramacaoWebBoletim.setBounds(10, 198, 46, 14);
-		panel_Boletim.add(lblNotaProgramacaoWebBoletim);
-
-		tf_NotaProgramacaoWebBoletim = new JTextField();
-		tf_NotaProgramacaoWebBoletim.setEditable(false);
-		tf_NotaProgramacaoWebBoletim.setColumns(10);
-		tf_NotaProgramacaoWebBoletim.setBounds(50, 195, 46, 20);
-		panel_Boletim.add(tf_NotaProgramacaoWebBoletim);
-
-		JLabel lblFaltasProgramacaoWebBoletim = new JLabel("Faltas");
-		lblFaltasProgramacaoWebBoletim.setBounds(125, 198, 46, 14);
-		panel_Boletim.add(lblFaltasProgramacaoWebBoletim);
-
-		tf_FaltasProgramacaoWebBoletim = new JTextField();
-		tf_FaltasProgramacaoWebBoletim.setEditable(false);
-		tf_FaltasProgramacaoWebBoletim.setColumns(10);
-		tf_FaltasProgramacaoWebBoletim.setBounds(170, 195, 46, 20);
-		panel_Boletim.add(tf_FaltasProgramacaoWebBoletim);
 
 		JButton btnConsultarBoletim = new JButton("");
 		btnConsultarBoletim.setIcon(new ImageIcon("C:\\Users\\Pichau\\Documents\\Projeto-Sistema-Academico-JAVA\\sistemaAcademico\\img\\consultar.png"));
 		btnConsultarBoletim.setBounds(451, 132, 71, 73);
 		panel_Boletim.add(btnConsultarBoletim);
 		
-		JLabel lblSelecionarSemestre = new JLabel("Selecionar Semestre");
-		lblSelecionarSemestre.setBounds(343, 64, 123, 14);
-		panel_Boletim.add(lblSelecionarSemestre);
+		JScrollPane spBoletim = new JScrollPane();
+		spBoletim.setBounds(10, 64, 427, 141);
+		panel_Boletim.add(spBoletim);
 		
-		JComboBox bc_Selecionar_Semestre = new JComboBox();
-		bc_Selecionar_Semestre.setModel(new DefaultComboBoxModel(new String[] {"1º", "2º", "3º", "4º", "5º", "6º", "7º", "8º"}));
-		bc_Selecionar_Semestre.setBounds(476, 62, 46, 22);
-		panel_Boletim.add(bc_Selecionar_Semestre);
+		JTextArea ta_Boletim = new JTextArea();
+		ta_Boletim.setEditable(false);
+		ta_Boletim.setLineWrap(true);
+		ta_Boletim.setWrapStyleWord(true);
+		spBoletim.setViewportView(ta_Boletim);
 
 		// Botões gerais da tela principal, posicionados abaixo das abas/campos
 		JButton btnNovo = new JButton("Novo");
@@ -563,13 +450,6 @@ public class Gui extends JFrame {
 			}
 		});
 
-		btnCursoSalvar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Reaproveita a mesma ação do menu Salvar Aluno e Curso
-				mntmSalvar_Aluno_Curso.doClick();
-			}
-		});
-
 
 		// ===================== INÍCIO: ALTERAR ALUNO E CURSO =====================
 		// Atualiza os dados do aluno e do curso com base no RGM digitado
@@ -627,12 +507,6 @@ public class Gui extends JFrame {
 					JOptionPane.showMessageDialog(null, "ERRO: " + e1.getMessage());
 					e1.printStackTrace();
 				}
-			}
-		});
-
-		btnCursoAlterar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				mntmAlterar_Aluno.doClick();
 			}
 		});
 
@@ -704,12 +578,6 @@ public class Gui extends JFrame {
 			}
 		});
 
-		btnCursoConsultar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				mntmConsultar_Aluno.doClick();
-			}
-		});
-
 
 		// ===================== INÍCIO: EXCLUIR ALUNO =====================
 		// Exclui o aluno, o curso e as notas ligadas ao RGM informado
@@ -757,12 +625,6 @@ public class Gui extends JFrame {
 			}
 		});
 
-		btnCursoExcluir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				mntmExcluir_Aluno.doClick();
-			}
-		});
-
 		// ===================== INÍCIO: SALVAR NOTA =====================
 		// Salva uma nota/falta para o aluno, disciplina e semestre selecionados
 		mntmSalvar_Nf.addActionListener(new ActionListener() {
@@ -786,12 +648,6 @@ public class Gui extends JFrame {
 					JOptionPane.showMessageDialog(null, "ERRO: " + e1.getMessage());
 					e1.printStackTrace();
 				}
-			}
-		});
-
-		btnNfSalvar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				mntmSalvar_Nf.doClick();
 			}
 		});
 
@@ -819,12 +675,6 @@ public class Gui extends JFrame {
 					JOptionPane.showMessageDialog(null, "ERRO: " + e1.getMessage());
 					e1.printStackTrace();
 				}
-			}
-		});
-
-		btnNfAlterar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				mntmAlterar_Nf.doClick();
 			}
 		});
 
@@ -882,12 +732,6 @@ public class Gui extends JFrame {
 			}
 		});
 
-		btnNfConsultar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				mntmConsultar_Nf.doClick();
-			}
-		});
-
 		// ===================== INÍCIO: EXCLUIR NOTA =====================
 		// Exclui somente a nota da disciplina e semestre selecionados
 		mntmExcluir_Nf.addActionListener(new ActionListener() {
@@ -924,37 +768,26 @@ public class Gui extends JFrame {
 			}
 		});
 
-		btnNfExcluir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				mntmExcluir_Nf.doClick();
-			}
-		});
-
 
 		// ===================== INÍCIO: CONSULTAR BOLETIM =====================
-		// Busca os dados do aluno e todas as notas do semestre selecionado
+		// Busca os dados do aluno e monta o boletim em formato de texto
 		btnConsultarBoletim.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					String rgm = tf_RgmBoletim.getText();
-					// No boletim, além do RGM, o semestre também define quais notas serão buscadas
-					String semestre = (String) bc_Selecionar_Semestre.getSelectedItem();
 
 					dao = new LeitorDAO();
 
-					// Consulta os dados do aluno e do curso pelo RGM
+					// Consulta os dados básicos do aluno e do curso pelo RGM
 					alunoCursoNota = dao.consultarAlunoCurso(rgm);
 
 					if (alunoCursoNota == null) {
 						JOptionPane.showMessageDialog(null, "Aluno não encontrado!");
+
 						tf_NomeBoletim.setText(null);
 						tf_CursoBoletim.setText(null);
-						tf_NotaBoletim.setText(null);
-						tf_FaltasBoletim.setText(null);
-						tf_NotaBancoDadosBoletim.setText(null);
-						tf_FaltasBancoDadosBoletim.setText(null);
-						tf_NotaProgramacaoWebBoletim.setText(null);
-						tf_FaltasProgramacaoWebBoletim.setText(null);
+						ta_Boletim.setText(null);
+
 						return;
 					}
 
@@ -965,40 +798,42 @@ public class Gui extends JFrame {
 					tf_NomeBoletim.setText(aluno.getNome());
 					tf_CursoBoletim.setText(curso.getCurso());
 
-					// Limpa os campos antes de preencher novamente
-					tf_NotaBoletim.setText(null);
-					tf_FaltasBoletim.setText(null);
-					tf_NotaBancoDadosBoletim.setText(null);
-					tf_FaltasBancoDadosBoletim.setText(null);
-					tf_NotaProgramacaoWebBoletim.setText(null);
-					tf_FaltasProgramacaoWebBoletim.setText(null);
+					// Busca todas as notas cadastradas para esse aluno
+					List<Nota> notas = dao.consultarNotasBoletim(rgm);
 
-					// Consulta todas as notas do aluno naquele semestre
-					// Busca todas as notas daquele aluno no semestre escolhido
-					List<Nota> notas = dao.consultarNotasPorSemestre(rgm, semestre);
-
-					// Se o aluno existe, mas não tem notas nesse semestre, o boletim não é preenchido
 					if (notas.isEmpty()) {
-						JOptionPane.showMessageDialog(null, "Aluno encontrado, mas não há notas cadastradas para esse semestre.");
+						JOptionPane.showMessageDialog(null, "Aluno encontrado, mas não há notas cadastradas.");
+						ta_Boletim.setText(null);
 						return;
 					}
 
-					// Percorre as notas encontradas e coloca cada uma no campo correto do boletim
-					for (Nota n : notas) {
-						String disciplina = n.getDisciplina();
+					StringBuilder textoBoletim = new StringBuilder();
 
-						// Cada disciplina tem seu próprio campo de nota e faltas no boletim
-						if (disciplina.equals("Programação Orientada a Objeto")) {
-							tf_NotaBoletim.setText(n.getNota());
-							tf_FaltasBoletim.setText(String.valueOf(n.getFaltas()));
-						} else if (disciplina.equals("Banco de dados")) {
-							tf_NotaBancoDadosBoletim.setText(n.getNota());
-							tf_FaltasBancoDadosBoletim.setText(String.valueOf(n.getFaltas()));
-						} else if (disciplina.equals("Programação WEB")) {
-							tf_NotaProgramacaoWebBoletim.setText(n.getNota());
-							tf_FaltasProgramacaoWebBoletim.setText(String.valueOf(n.getFaltas()));
-						}
+					textoBoletim.append("Curso: ")
+							.append(curso.getCurso())
+							.append("\n\n");
+
+					for (Nota n : notas) {
+						textoBoletim.append("Disciplina: ")
+								.append(n.getDisciplina())
+								.append("\n");
+
+						textoBoletim.append("Semestre: ")
+								.append(n.getSemestre())
+								.append("\n");
+
+						textoBoletim.append("Nota final: ")
+								.append(n.getNota())
+								.append("\n");
+
+						textoBoletim.append("Total de faltas: ")
+								.append(n.getFaltas())
+								.append("\n");
+
+						textoBoletim.append("-----------------------------\n");
 					}
+
+					ta_Boletim.setText(textoBoletim.toString());
 
 					JOptionPane.showMessageDialog(null, "Boletim consultado com sucesso!");
 
@@ -1008,6 +843,7 @@ public class Gui extends JFrame {
 				}
 			}
 		});
+		// ===================== FIM: CONSULTAR BOLETIM =====================
 
 		mntmSair_Aluno.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -1040,19 +876,13 @@ public class Gui extends JFrame {
 				tf_RgmBoletim.setText(null);
 				tf_NomeBoletim.setText(null);
 				tf_CursoBoletim.setText(null);
-				tf_NotaBoletim.setText(null);
-				tf_FaltasBoletim.setText(null);
-				tf_NotaBancoDadosBoletim.setText(null);
-				tf_FaltasBancoDadosBoletim.setText(null);
-				tf_NotaProgramacaoWebBoletim.setText(null);
-				tf_FaltasProgramacaoWebBoletim.setText(null);
+				ta_Boletim.setText(null);
 				cb_Uf.setSelectedIndex(0);
 				cb_Curso.setSelectedIndex(0);
 				cb_Campus.setSelectedIndex(0);
 				cb_Disciplina.setSelectedIndex(0);
 				cb_Semestre.setSelectedIndex(0);
 				cb_Nota.setSelectedIndex(0);
-				bc_Selecionar_Semestre.setSelectedIndex(0);
 				periodo.clearSelection();
 			}
 		});

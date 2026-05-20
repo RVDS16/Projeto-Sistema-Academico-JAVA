@@ -344,4 +344,42 @@ public class LeitorDAO {
 	}
 	// ===================== FIM: CONSULTAR NOTAS POR SEMESTRE =====================
 
+
+	// ===================== INÍCIO: CONSULTAR NOTAS DO BOLETIM =====================
+	// Usado no boletim para trazer todas as notas cadastradas do aluno, sem filtrar por semestre.
+	public List<Nota> consultarNotasBoletim(String rgm) throws Exception {
+		List<Nota> lista = new ArrayList<Nota>();
+
+		try {
+			String sql = "SELECT id_nota, disciplina, semestre, nota, faltas, fk_rgm "
+					+ "FROM tb_notas "
+					+ "WHERE fk_rgm = ? "
+					+ "ORDER BY semestre, disciplina";
+
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, rgm);
+
+			rs = ps.executeQuery();
+
+			while (rs.next()) {
+				Nota nota = new Nota();
+
+				nota.setIdNota(rs.getInt("id_nota"));
+				nota.setDisciplina(rs.getString("disciplina"));
+				nota.setSemestre(rs.getString("semestre"));
+				nota.setNota(rs.getString("nota"));
+				nota.setFaltas(rs.getInt("faltas"));
+				nota.setRgm(rs.getString("fk_rgm"));
+
+				lista.add(nota);
+			}
+
+			return lista;
+
+		} catch(Exception e) {
+			throw new Exception("ERRO AO CONSULTAR BOLETIM: " + e.getMessage());
+		}
+	}
+	// ===================== FIM: CONSULTAR NOTAS DO BOLETIM =====================
+
 }
