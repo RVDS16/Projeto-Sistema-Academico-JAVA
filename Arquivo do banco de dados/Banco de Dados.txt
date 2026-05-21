@@ -26,8 +26,8 @@ CREATE TABLE `tb_aluno` (
   `cpf` char(13) UNIQUE NOT NULL,
   `nome` varchar(40) NOT NULL,
   `data_nasc` date NOT NULL,
-  `email` varchar(40) NOT NULL,
-  `numero` char(14) NOT NULL,
+  `email` varchar(40) NOT NULL UNIQUE,
+  `numero` char(14) NOT NULL UNIQUE,
   `endereco` varchar(30) NOT NULL,
   `municipio` varchar(20) NOT NULL,
   `uf` enum('AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO') NOT NULL
