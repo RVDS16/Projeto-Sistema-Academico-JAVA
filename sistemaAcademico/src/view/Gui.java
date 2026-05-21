@@ -73,6 +73,11 @@ public class Gui extends JFrame {
 		});
 	}
 
+	// Verifica se o e-mail tem texto antes e depois do @
+	private boolean emailValido(String email) {
+		return email != null && email.matches("^[^\\s@]+@[^\\s@]+$");
+	}
+
 	// Construtor da tela: aqui a interface é montada e os botões recebem suas ações
 	public Gui() throws Exception {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -294,7 +299,7 @@ public class Gui extends JFrame {
 		panel_Notas_Faltas.add(lblDisciplina);
 
 		JComboBox cb_Disciplina = new JComboBox();
-		cb_Disciplina.setModel(new DefaultComboBoxModel(new String[] {"Programação Orientada a Objeto", "Banco de dados", "Programação WEB"}));
+		cb_Disciplina.setModel(new DefaultComboBoxModel(new String[] {"Programação Orientada a Objeto", "Banco de dados", "Programação WEB", "Programação de Computadores", "Modelagem de Dados", "Sistemas Operacionais", "Engenharia de Software", "Computação em Nuvem", "Análise e Projeto de Sistemas", "Modelagem de Negócios e Requisitos"}));
 		cb_Disciplina.setBounds(72, 69, 450, 22);
 		panel_Notas_Faltas.add(cb_Disciplina);
 
@@ -378,9 +383,9 @@ public class Gui extends JFrame {
 		spBoletim.setViewportView(ta_Boletim);
 
 		// Botões gerais da tela principal, posicionados abaixo das abas/campos
-		JButton btnNovo = new JButton("Novo");
-		btnNovo.setBounds(458, 39, 89, 23);
-		contentPane.add(btnNovo);
+		JButton btnResetarCampos = new JButton("Resetar Campos");
+		btnResetarCampos.setBounds(413, 39, 134, 23);
+		contentPane.add(btnResetarCampos);
 
 		// ===================== INÍCIO: SALVAR ALUNO E CURSO =====================
 		// Pega os dados digitados nas abas de aluno/curso e grava no banco
@@ -405,7 +410,15 @@ public class Gui extends JFrame {
 					aluno.setData_nasc(dataBanco);
 
 					aluno.setCpf(ftf_Cpf.getText().replace(".", "").replace("-", ""));
-					aluno.setEmail(ftf_Email.getText());
+
+					String email = ftf_Email.getText().trim();
+
+					if (!emailValido(email)) {
+						JOptionPane.showMessageDialog(null, "Digite um e-mail válido. Exemplo: nome@email");
+						return;
+					}
+
+					aluno.setEmail(email);
 					aluno.setEndereco(ftf_Endereco.getText());
 					aluno.setMunicipio(ftf_Municipio.getText());
 					aluno.setUf((String) cb_Uf.getSelectedItem());
@@ -460,31 +473,54 @@ public class Gui extends JFrame {
 
 
 		// ===================== INÍCIO: ALTERAR ALUNO E CURSO =====================
-		// Atualiza os dados do aluno e do curso com base no RGM digitado
+		// Antes de alterar, mostra os dados atuais e os novos dados que serão gravados
 		mntmAlterar_Aluno.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					aluno = new Aluno();
+					String rgm = ftf_Rgm.getText();
 
-					aluno.setRgm(ftf_Rgm.getText());
-					aluno.setNome(ftf_Nome.getText());
+					dao = new LeitorDAO();
+
+					// Busca o registro atual no banco para mostrar na confirmação
+					AlunoCursoNota alunoCursoAtual = dao.consultarAlunoCurso(rgm);
+
+					if (alunoCursoAtual == null) {
+						JOptionPane.showMessageDialog(null, "Aluno não encontrado!");
+						return;
+					}
+
+					Aluno alunoAtual = alunoCursoAtual.getAluno();
+					Curso cursoAtual = alunoCursoAtual.getCurso();
+
+					Aluno alunoNovo = new Aluno();
+
+					alunoNovo.setRgm(ftf_Rgm.getText());
+					alunoNovo.setNome(ftf_Nome.getText());
 
 					String dataTela = ftf_Dt_Nasc.getText();
 					String[] partes = dataTela.split("/");
 					String dataBanco = partes[2] + "-" + partes[1] + "-" + partes[0];
-					aluno.setData_nasc(dataBanco);
+					alunoNovo.setData_nasc(dataBanco);
 
-					aluno.setCpf(ftf_Cpf.getText().replace(".", "").replace("-", ""));
-					aluno.setEmail(ftf_Email.getText());
-					aluno.setEndereco(ftf_Endereco.getText());
-					aluno.setMunicipio(ftf_Municipio.getText());
-					aluno.setUf((String) cb_Uf.getSelectedItem());
-					aluno.setNumero(ftf_Celular.getText());
+					alunoNovo.setCpf(ftf_Cpf.getText().replace(".", "").replace("-", ""));
 
-					curso = new Curso();
+					String email = ftf_Email.getText().trim();
 
-					curso.setCurso((String) cb_Curso.getSelectedItem());
-					curso.setCampus((String) cb_Campus.getSelectedItem());
+					if (!emailValido(email)) {
+						JOptionPane.showMessageDialog(null, "Digite um e-mail válido. Exemplo: nome@email");
+						return;
+					}
+
+					alunoNovo.setEmail(email);
+					alunoNovo.setEndereco(ftf_Endereco.getText());
+					alunoNovo.setMunicipio(ftf_Municipio.getText());
+					alunoNovo.setUf((String) cb_Uf.getSelectedItem());
+					alunoNovo.setNumero(ftf_Celular.getText());
+
+					Curso cursoNovo = new Curso();
+
+					cursoNovo.setCurso((String) cb_Curso.getSelectedItem());
+					cursoNovo.setCampus((String) cb_Campus.getSelectedItem());
 
 					String periodoSelecionado = "";
 
@@ -501,12 +537,38 @@ public class Gui extends JFrame {
 						return;
 					}
 
-					curso.setPeriodo(periodoSelecionado);
+					cursoNovo.setPeriodo(periodoSelecionado);
 
-					alunoCursoNota = new AlunoCursoNota(aluno, curso, null);
+					String mensagem = "Deseja alterar o seguinte registro?\n\n"
+							+ "REGISTRO ATUAL\n"
+							+ "- Nome atual do aluno: " + alunoAtual.getNome() + "\n"
+							+ "- RGM atual do aluno: " + alunoAtual.getRgm() + "\n"
+							+ "- CPF atual do aluno: " + alunoAtual.getCpf() + "\n"
+							+ "- Curso atual: " + cursoAtual.getCurso() + "\n"
+							+ "- Campus atual: " + cursoAtual.getCampus() + "\n"
+							+ "- Período atual: " + cursoAtual.getPeriodo() + "\n\n"
+							+ "PARA\n\n"
+							+ "NOVOS DADOS SELECIONADOS\n"
+							+ "- Nome do aluno: " + alunoNovo.getNome() + "\n"
+							+ "- RGM do aluno: " + alunoNovo.getRgm() + "\n"
+							+ "- CPF do aluno: " + alunoNovo.getCpf() + "\n"
+							+ "- Curso: " + cursoNovo.getCurso() + "\n"
+							+ "- Campus: " + cursoNovo.getCampus() + "\n"
+							+ "- Período: " + cursoNovo.getPeriodo();
 
-					dao = new LeitorDAO();
-					// Envia os dados atualizados para o banco
+					int resposta = JOptionPane.showConfirmDialog(
+							null,
+							mensagem,
+							"Confirmar alteração",
+							JOptionPane.YES_NO_OPTION
+					);
+
+					if (resposta != JOptionPane.YES_OPTION) {
+						return;
+					}
+
+					alunoCursoNota = new AlunoCursoNota(alunoNovo, cursoNovo, null);
+
 					dao.alterarAlunoCurso(alunoCursoNota);
 
 					JOptionPane.showMessageDialog(null, "Aluno e curso alterados com sucesso!");
@@ -517,7 +579,6 @@ public class Gui extends JFrame {
 				}
 			}
 		});
-
 
 		// ===================== INÍCIO: CONSULTAR ALUNO E CURSO =====================
 		// Pesquisa pelo RGM e joga os dados encontrados de volta nos campos da tela
@@ -589,29 +650,45 @@ public class Gui extends JFrame {
 
 
 		// ===================== INÍCIO: EXCLUIR ALUNO =====================
-		// Exclui o aluno, o curso e as notas ligadas ao RGM informado
+		// Antes de excluir, mostra os dados do aluno que será removido
 		mntmExcluir_Aluno.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					String rgm = ftf_Rgm.getText();
 
-					// Antes de excluir, pede confirmação para evitar apagar por acidente
-					// Guarda a resposta do usuário para saber se ele confirmou ou cancelou a exclusão
+					dao = new LeitorDAO();
+
+					// Consulta o registro atual para confirmar exatamente o que será excluído
+					AlunoCursoNota alunoCursoAtual = dao.consultarAlunoCurso(rgm);
+
+					if (alunoCursoAtual == null) {
+						JOptionPane.showMessageDialog(null, "Aluno não encontrado!");
+						return;
+					}
+
+					Aluno alunoAtual = alunoCursoAtual.getAluno();
+					Curso cursoAtual = alunoCursoAtual.getCurso();
+
+					String mensagem = "Deseja excluir o seguinte registro?\n\n"
+							+ "- Nome do aluno: " + alunoAtual.getNome() + "\n"
+							+ "- RGM do aluno: " + alunoAtual.getRgm() + "\n"
+							+ "- CPF do aluno: " + alunoAtual.getCpf() + "\n"
+							+ "- Curso: " + cursoAtual.getCurso() + "\n"
+							+ "- Campus: " + cursoAtual.getCampus() + "\n"
+							+ "- Período: " + cursoAtual.getPeriodo() + "\n\n"
+							+ "Atenção: as notas deste aluno também serão excluídas.";
+
 					int resposta = JOptionPane.showConfirmDialog(
 							null,
-							"Deseja excluir este aluno, curso e todas as notas dele?",
+							mensagem,
 							"Confirmar exclusão",
 							JOptionPane.YES_NO_OPTION
 					);
 
-					// Se o usuário escolher "Não", a exclusão é cancelada
-					// Se a resposta não for SIM, o return encerra a ação antes de apagar qualquer coisa
 					if (resposta != JOptionPane.YES_OPTION) {
 						return;
 					}
 
-					dao = new LeitorDAO();
-					// Exclui do banco as notas, o curso e o aluno ligados a esse RGM
 					dao.excluirAluno(rgm);
 
 					ftf_Rgm.setText(null);
@@ -667,21 +744,69 @@ public class Gui extends JFrame {
 
 
 		// ===================== INÍCIO: ALTERAR NOTA =====================
-		// Altera a nota e as faltas usando RGM + disciplina + semestre como referência
+		// Antes de alterar, mostra os dados atuais da nota e os novos dados selecionados
 		mntmAlterar_Nf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					nota = new Nota();
-
-					nota.setRgm(ftf_Rgm_pesquisa.getText());
-					nota.setDisciplina((String) cb_Disciplina.getSelectedItem());
-					nota.setSemestre((String) cb_Semestre.getSelectedItem());
-					nota.setNota((String) cb_Nota.getSelectedItem());
-					nota.setFaltas(Integer.parseInt(ftf_Faltas.getText()));
+					String rgm = ftf_Rgm_pesquisa.getText();
+					String disciplina = (String) cb_Disciplina.getSelectedItem();
+					String semestre = (String) cb_Semestre.getSelectedItem();
 
 					dao = new LeitorDAO();
-					// Altera a nota já cadastrada no banco
-					dao.alterarNota(nota);
+
+					AlunoCursoNota alunoCursoAtual = dao.consultarAlunoCurso(rgm);
+
+					if (alunoCursoAtual == null) {
+						JOptionPane.showMessageDialog(null, "Aluno não encontrado!");
+						return;
+					}
+
+					Nota notaAtual = dao.consultarNota(rgm, disciplina, semestre);
+
+					if (notaAtual == null) {
+						JOptionPane.showMessageDialog(null, "Não existe nota cadastrada para essa disciplina e semestre.");
+						return;
+					}
+
+					aluno = alunoCursoAtual.getAluno();
+
+					Nota notaNova = new Nota();
+
+					notaNova.setRgm(rgm);
+					notaNova.setDisciplina(disciplina);
+					notaNova.setSemestre(semestre);
+					notaNova.setNota((String) cb_Nota.getSelectedItem());
+					notaNova.setFaltas(Integer.parseInt(ftf_Faltas.getText()));
+
+					String mensagem = "Deseja alterar o seguinte registro?\n\n"
+							+ "REGISTRO ATUAL\n"
+							+ "- Nome atual do aluno: " + aluno.getNome() + "\n"
+							+ "- RGM atual do aluno: " + notaAtual.getRgm() + "\n"
+							+ "- Disciplina: " + notaAtual.getDisciplina() + "\n"
+							+ "- Semestre: " + notaAtual.getSemestre() + "\n"
+							+ "- Nota atual: " + notaAtual.getNota() + "\n"
+							+ "- Falta atual: " + notaAtual.getFaltas() + "\n\n"
+							+ "PARA\n\n"
+							+ "NOVOS DADOS SELECIONADOS\n"
+							+ "- Nome do aluno: " + aluno.getNome() + "\n"
+							+ "- RGM do aluno: " + notaNova.getRgm() + "\n"
+							+ "- Disciplina: " + notaNova.getDisciplina() + "\n"
+							+ "- Semestre: " + notaNova.getSemestre() + "\n"
+							+ "- Nota: " + notaNova.getNota() + "\n"
+							+ "- Falta: " + notaNova.getFaltas();
+
+					int resposta = JOptionPane.showConfirmDialog(
+							null,
+							mensagem,
+							"Confirmar alteração",
+							JOptionPane.YES_NO_OPTION
+					);
+
+					if (resposta != JOptionPane.YES_OPTION) {
+						return;
+					}
+
+					dao.alterarNota(notaNova);
 
 					JOptionPane.showMessageDialog(null, "Nota alterada com sucesso!");
 
@@ -692,9 +817,9 @@ public class Gui extends JFrame {
 			}
 		});
 
-
 		// ===================== INÍCIO: CONSULTAR NOTA =====================
-		// Busca o aluno e a nota da disciplina/semestre selecionados
+		// Consulta a nota usando três filtros: RGM, disciplina e semestre.
+		// Assim, se mudar a disciplina ou o semestre, o resultado também muda.
 		mntmConsultar_Nf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -704,15 +829,17 @@ public class Gui extends JFrame {
 
 					dao = new LeitorDAO();
 
-					// Primeiro consulta Aluno + Curso para preencher os campos de resultado desta aba
+					// Primeiro confere se o aluno existe, para preencher nome e curso na tela
 					alunoCursoNota = dao.consultarAlunoCurso(rgm);
 
 					if (alunoCursoNota == null) {
 						JOptionPane.showMessageDialog(null, "Aluno não encontrado!");
+
 						tf_Resultado_Busca_Nome.setText(null);
 						tf_Resultado_Busca_Curso.setText(null);
 						cb_Nota.setSelectedIndex(0);
 						ftf_Faltas.setText(null);
+
 						return;
 					}
 
@@ -722,23 +849,24 @@ public class Gui extends JFrame {
 					tf_Resultado_Busca_Nome.setText(aluno.getNome());
 					tf_Resultado_Busca_Curso.setText(curso.getCurso());
 
-					// Depois consulta a nota da disciplina/semestre selecionados
-					// Consulta uma nota específica usando a combinação que identifica o registro no banco
+					// Agora busca a nota exata daquele aluno naquela disciplina e naquele semestre
 					nota = dao.consultarNota(rgm, disciplina, semestre);
 
-					// Se não houver nota cadastrada para essa combinação, avisa e limpa os campos de nota
-					// Se não existe nota para essa disciplina/semestre, os campos de nota são limpos
 					if (nota == null) {
-						JOptionPane.showMessageDialog(null, "Aluno encontrado, mas não existe nota cadastrada para essa disciplina e semestre.");
+						JOptionPane.showMessageDialog(null,
+								"Não existe nota cadastrada para essa disciplina e semestre.");
+
 						cb_Nota.setSelectedIndex(0);
 						ftf_Faltas.setText(null);
+
 						return;
 					}
 
+					// Se encontrou, joga a nota e as faltas nos campos corretos da aba
 					cb_Nota.setSelectedItem(nota.getNota());
 					ftf_Faltas.setText(String.valueOf(nota.getFaltas()));
 
-					JOptionPane.showMessageDialog(null, "Dados de notas e faltas encontrados!");
+					JOptionPane.showMessageDialog(null, "Nota encontrada!");
 
 				} catch(Exception e1) {
 					JOptionPane.showMessageDialog(null, "ERRO: " + e1.getMessage());
@@ -748,7 +876,7 @@ public class Gui extends JFrame {
 		});
 
 		// ===================== INÍCIO: EXCLUIR NOTA =====================
-		// Exclui somente a nota da disciplina e semestre selecionados
+		// Antes de excluir, mostra os dados da nota selecionada
 		mntmExcluir_Nf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -756,9 +884,35 @@ public class Gui extends JFrame {
 					String disciplina = (String) cb_Disciplina.getSelectedItem();
 					String semestre = (String) cb_Semestre.getSelectedItem();
 
+					dao = new LeitorDAO();
+
+					AlunoCursoNota alunoCursoAtual = dao.consultarAlunoCurso(rgm);
+
+					if (alunoCursoAtual == null) {
+						JOptionPane.showMessageDialog(null, "Aluno não encontrado!");
+						return;
+					}
+
+					Nota notaAtual = dao.consultarNota(rgm, disciplina, semestre);
+
+					if (notaAtual == null) {
+						JOptionPane.showMessageDialog(null, "Não existe nota cadastrada para essa disciplina e semestre.");
+						return;
+					}
+
+					aluno = alunoCursoAtual.getAluno();
+
+					String mensagem = "Deseja excluir o seguinte registro?\n\n"
+							+ "- Nome do aluno: " + aluno.getNome() + "\n"
+							+ "- RGM do aluno: " + notaAtual.getRgm() + "\n"
+							+ "- Disciplina: " + notaAtual.getDisciplina() + "\n"
+							+ "- Semestre: " + notaAtual.getSemestre() + "\n"
+							+ "- Nota: " + notaAtual.getNota() + "\n"
+							+ "- Falta: " + notaAtual.getFaltas();
+
 					int resposta = JOptionPane.showConfirmDialog(
 							null,
-							"Deseja excluir a nota desta disciplina e semestre?",
+							mensagem,
 							"Confirmar exclusão",
 							JOptionPane.YES_NO_OPTION
 					);
@@ -767,8 +921,6 @@ public class Gui extends JFrame {
 						return;
 					}
 
-					dao = new LeitorDAO();
-					// Exclui somente a nota selecionada, sem apagar aluno ou curso
 					dao.excluirNota(rgm, disciplina, semestre);
 
 					cb_Nota.setSelectedIndex(0);
@@ -782,7 +934,6 @@ public class Gui extends JFrame {
 				}
 			}
 		});
-
 
 		// ===================== INÍCIO: CONSULTAR BOLETIM =====================
 		// Busca o aluno pelo RGM e monta o boletim em texto, sem depender de campos fixos
@@ -878,7 +1029,7 @@ public class Gui extends JFrame {
 
 		// ===================== INÍCIO: BOTÃO NOVO =====================
 		// Limpa os campos da tela para começar outro cadastro ou consulta
-		btnNovo.addActionListener(new ActionListener() {
+		btnResetarCampos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ftf_Rgm.setText(null);
 				ftf_Nome.setText(null);
